@@ -1,20 +1,20 @@
 unique_id,system_prompt,prompt
-h9f8b2s7,generate_response,write a short story about a robot learning to love
-q1k9w5z2,fetch_data,collect the most recent data from the website API
-z3g6t9u8,process_data,analyze and categorize the incoming data set
-x7j4d2q1,summarize_text,create a brief summary of the research article
-p5v1o8a3,generate_response,respond to a customer query about product shipping times
-r2j5d7n9,fetch_data,fetch historical data on market trends for analysis
-s8b2u3f7,process_data,process the raw images to extract text
-w1c9f4v2,summarize_text,summarize the key points from the meeting notes
-j6k2n7o1,generate_response,give a recommendation for improving team productivity
-e5h8z3r2,fetch_data,retrieve the latest news articles related to AI
-y4p1q7j6,process_data,process the large log files and filter errors
-u3r9m5w2,summarize_text,generate a summary of this year’s budget report
-b7c1t6o8,generate_response,write a polite follow-up email to a client
-n2x5w4q9,fetch_data,gather public opinion data from social media platforms
-v8g3k1j5,process_data,extract key phrases from customer reviews
-d9h3z7u4,summarize_text,create a brief summary of the new policy changes
-t2o5x1b7,generate_response,create a witty response to a humorous comment
-y9w8e3r2,fetch_data,retrieve the latest product feedback from users
-m4n1k7a2,process_data,process the survey data and categorize responses
+01_h9f8b2s7,generate_response,write a short story about a robot learning to love
+02_q1k9w5z2,fetch_data,collect the most recent data from the website API
+03_z3g6t9u8,process_data,analyze and categorize the incoming data set
+04_x7j4d2q1,summarize_text,create a brief summary of the research article
+05_p5v1o8a3,generate_response,respond to a customer query about product shipping times
+06_r2j5d7n9,fetch_data,fetch historical data on market trends for analysis
+07_s8b2u3f7,process_data,process the raw images to extract text
+08_w1c9f4v2,summarize_text,summarize the key points from the meeting notes
+09_j6k2n7o1,generate_response,give a recommendation for improving team productivity
+10_e5h8z3r2,fetch_data,retrieve the latest news articles related to AI
+11_y4p1q7j6,process_data,process the large log files and filter errors
+12_u3r9m5w2,summarize_text,generate a summary of this year’s budget report
+13_b7c1t6o8,generate_response,write a polite follow-up email to a client
+14_n2x5w4q9,fetch_data,gather public opinion data from social media platforms
+15_v8g3k1j5,process_data,extract key phrases from customer reviews
+16_d9h3z7u4,summarize_text,create a brief summary of the new policy changes
+17_t2o5x1b7,generate_response,create a witty response to a humorous comment
+18_y9w8e3r2,fetch_data,retrieve the latest product feedback from users
+19_m4n1k7a2,process_data,process the survey data and categorize responses

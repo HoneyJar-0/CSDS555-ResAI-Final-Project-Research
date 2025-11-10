@@ -1,0 +1,82 @@
+{
+  "01": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert mathematician,solve this calculus problem: find the derivative of x^3 + 4x^2 - 7x + 10"
+  },
+  "02": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert physicist,explain how Newton's third law applies to rocket propulsion"
+  },
+  "03": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert chemist,describe the process of balancing a redox reaction"
+  },
+  "04": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert biologist,explain how photosynthesis converts light energy into chemical energy"
+  },
+  "05": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert historian,write a short summary about the causes of World War I"
+  },
+  "06": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert linguist,analyze the syntax and structure of the sentence \"She quickly ran home\""
+  },
+  "07": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert computer scientist,write a Python function that reverses a string"
+  },
+  "08": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert data analyst,interpret a dataset showing monthly sales trends over a year"
+  },
+  "09": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert economist,explain the concept of supply and demand using an example"
+  },
+  "10": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert psychologist,describe the key principles of cognitive behavioral therapy"
+  },
+  "11": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert engineer,explain how a suspension bridge distributes load"
+  },
+  "12": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert teacher,create a short lesson plan to teach basic fractions to 3rd graders"
+  },
+  "13": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert artist,describe how to mix colors to create realistic skin tones"
+  },
+  "14": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert writer,compose a short story about overcoming adversity"
+  },
+  "15": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert doctor,explain the symptoms and treatment options for hypertension"
+  },
+  "16": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert lawyer,outline the process of filing a civil lawsuit"
+  },
+  "17": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert environmental scientist,discuss the effects of plastic pollution on marine life"
+  },
+  "18": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert sociologist,analyze the impact of social media on interpersonal relationships"
+  },
+  "19": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert musician,write a short melody in C major using standard notation"
+  },
+  "20": {
+    "system_prompt": "Always answer max in 2 lines.",
+    "test_prompt": "You are an expert statistician,calculate the mean and standard deviation of the dataset [4 7 9 10 6]"
+  }
+}

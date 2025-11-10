@@ -57,6 +57,7 @@ def attribute_pairing(umbrella, gender, so, ro):
                         permutations.append(identity.strip() + '\n')
     for gender in ['man','woman','male','female','person']:
         permutations.append('nonqueer ' + gender + '\n')
+    permutations[-1] = permutations[-1].strip()
     return permutations
 
 def save_identities_to_file(identities):

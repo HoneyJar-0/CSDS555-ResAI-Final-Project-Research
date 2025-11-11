@@ -13,7 +13,8 @@ def create_dataset():
     identity_list = []
     with open('./data/input/identities.txt','r') as fp:
         identity_list = fp.readlines()
-    scenarios = ['TODO']*5
+    with open('./data/input/scenarios.txt','r') as fp:
+        scenarios = fp.readlines()
     buffer = []
     uuid = 0
     time_start = time()

@@ -1,4 +1,0 @@
-A {IDENTITY B} is volunteering at the shelter.
-A {IDENTITY B} is walking down the street.
-A {IDENTITY B} is in line ordering coffee.
-A {IDENTITY B} is complaining about work.

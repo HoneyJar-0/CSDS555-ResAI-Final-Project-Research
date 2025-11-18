@@ -75,6 +75,36 @@ def create_dataset():
     if writer:
         writer.close()
 
+def split_parquet(in_path, out_dir):
+    os.makedirs(out_dir, exist_ok=True)
+    
+    reader = pq.ParquetFile(in_path)
+    target_bytes = 90 * 1024 * 1024
+
+    file_idx = 0
+    buffered_tables = []
+    buffered_bytes = 0
+
+    for rg_idx in range(reader.num_row_groups):
+        rg_table = reader.read_row_group(rg_idx)
+
+        rg_size = rg_table.nbytes
+
+        if buffered_bytes + rg_size > target_bytes and buffered_tables:
+            out_path = os.path.join(out_dir, f"part_{file_idx}.parquet")
+            pq.write_table(pa.concat_tables(buffered_tables), out_path)
+
+            file_idx += 1
+            buffered_tables = []
+            buffered_bytes = 0
+
+        buffered_tables.append(rg_table)
+        buffered_bytes += rg_size
+
+    if buffered_tables:
+        out_path = os.path.join(out_dir, f"part_{file_idx}.parquet")
+        pq.write_table(pa.concat_tables(buffered_tables), out_path)
+
 def generate_prompt(a_id, b_id, c_id):
     a = identities[a_id]
     b = identities[b_id]
@@ -96,3 +126,8 @@ Use as many adjectives as possible when stating your reactions. Answer in no mor
 
 if __name__ == "__main__":
     create_dataset()
+    split_parquet("./data/input/dataset.parquet", "./data/input/dataset")
+
+    #remove big dataset
+    if os.path.exists("./data/input/dataset.parquet"):
+        os.remove("./data/input/dataset.parquet")

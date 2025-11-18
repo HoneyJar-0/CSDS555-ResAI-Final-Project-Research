@@ -10,7 +10,7 @@ from parquet_creation import generate_prompt
 def test_read_parquet():
     print("reading file...")
     df = pd.read_parquet(
-        "./data/input/dataset.parquet",
+        "./data/input/dataset",
         filters=[("UUID", ">", 1_000_000), ("UUID", "<", 1_500_000)]
     )
 

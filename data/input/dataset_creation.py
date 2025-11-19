@@ -3,8 +3,8 @@ import os
 from time import time
 
 def create_dataset():
-    header = "UUID,System_Identity,Scenario_Identity,Prompt\n"
-    with open('./dataset.csv','w') as fp:
+    header = "UUID,SystemIdentityIdx,ScenarioIdentityIdx,ScenarioIdx\n"
+    with open('./data/input/dataset.csv','w') as fp:
         fp.write(header)
 
     if not os.path.isfile('./data/input/identities.txt'):
@@ -17,12 +17,18 @@ def create_dataset():
     buffer = []
     uuid = 0
     time_start = time()
-    for sys_identity in identity_list:
-        for scen_identity in identity_list:
-            for scenario in scenarios:
-                buffer.append(f"{uuid},{sys_identity.strip()},{scen_identity.strip()},{prompt_creation(sys_identity, scen_identity, scenario)}\n")
-                if len(buffer) >= 50:
-                    with open('./dataset.csv','a') as fp:
+
+    sys_idx = 0
+    for _ in identity_list:
+        scen_id_idx = 0
+        for _ in identity_list:
+            scen_idx = 0
+            for _ in scenarios:
+                buffer.append(f"{uuid},{sys_idx},{scen_id_idx},{scen_idx}\n")
+                scen_idx +=1
+
+                if len(buffer) >= 100:
+                    with open('./data/input/dataset.csv','a') as fp:
                         fp.writelines(buffer)
                     buffer = []
                 if uuid%1000 == 0:
@@ -31,9 +37,8 @@ def create_dataset():
                     time_update = str(int(time_update//60)) + 'min ' + str(int(time_update%60)) + 's'
                     print("[" + "="*progress + '>' + ' '*(10 - progress) + '] ' + str(progress*10) + "% " + time_update,end='\r')
                 uuid += 1
-def prompt_creation(a,b,c):
-    #header, TODO
-    return "TODO"
+            scen_id_idx += 1
+        sys_idx += 1
 
 if __name__ == '__main__':
     create_dataset()

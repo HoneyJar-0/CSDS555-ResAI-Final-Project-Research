@@ -54,15 +54,18 @@ def attribute_pairing(umbrella, gender, so, ro):
                             identity = identity + attr + ' '
                     # Now we filter out nonqueer identities from the permutations.
                     if not (s == 'heterosexual' and r == 'heteroromantic' and (g == 'man' or g == 'male' or g == 'woman' or g == 'female')):
-                        permutations.append(identity.strip() + '\n')
+                        permutations.append(identity.strip())
     for gender in ['man','woman','male','female','person']:
-        permutations.append('nonqueer ' + gender + '\n')
+        permutations.append('nonqueer ' + gender)
     permutations[-1] = permutations[-1].strip()
     return permutations
 
 def save_identities_to_file(identities):
-    with open("identities.txt", 'w') as fp:
-        fp.writelines(identities)
+    with open("identities.csv", 'w') as fp:
+        fp.write("id,identity\n")
+        for i, ident in enumerate(identities):
+            fp.write(f"{i},{ident}\n")
+
 
 if __name__ == '__main__':
     umbrella, gender, so, ro = get_queer_attributes()

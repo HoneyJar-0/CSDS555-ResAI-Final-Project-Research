@@ -1,0 +1,1621 @@
+[[package]]
+name = "accelerate"
+version = "1.12.0"
+description = "Accelerate"
+category = "main"
+optional = false
+python-versions = ">=3.10.0"
+
+[package.dependencies]
+huggingface_hub = ">=0.21.0"
+numpy = ">=1.17"
+packaging = ">=20.0"
+psutil = "*"
+pyyaml = "*"
+safetensors = ">=0.4.3"
+torch = ">=2.0.0"
+
+[package.extras]
+quality = ["ruff (==0.13.1)"]
+test-prod = ["pytest (>=7.2.0)", "pytest-xdist", "pytest-subtests", "parameterized", "pytest-order"]
+test-dev = ["datasets", "diffusers", "evaluate", "torchdata (>=0.8.0)", "torchpippy (>=0.2.0)", "transformers", "scipy", "scikit-learn", "tqdm", "bitsandbytes", "timm"]
+testing = ["pytest (>=7.2.0)", "pytest-xdist", "pytest-subtests", "parameterized", "pytest-order", "datasets", "diffusers", "evaluate", "torchdata (>=0.8.0)", "torchpippy (>=0.2.0)", "transformers", "scipy", "scikit-learn", "tqdm", "bitsandbytes", "timm"]
+deepspeed = ["deepspeed"]
+rich = ["rich"]
+test-fp8 = ["torchao"]
+test-trackers = ["wandb", "comet-ml", "tensorboard", "dvclive", "matplotlib", "swanlab", "trackio"]
+dev = ["ruff (==0.13.1)", "pytest (>=7.2.0)", "pytest-xdist", "pytest-subtests", "parameterized", "pytest-order", "datasets", "diffusers", "evaluate", "torchdata (>=0.8.0)", "torchpippy (>=0.2.0)", "transformers", "scipy", "scikit-learn", "tqdm", "bitsandbytes", "timm", "rich"]
+sagemaker = ["sagemaker"]
+
+[[package]]
+name = "aiohappyeyeballs"
+version = "2.6.1"
+description = "Happy Eyeballs for asyncio"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[[package]]
+name = "aiohttp"
+version = "3.13.2"
+description = "Async http client/server framework (asyncio)"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+aiohappyeyeballs = ">=2.5.0"
+aiosignal = ">=1.4.0"
+async-timeout = {version = ">=4.0,<6.0", markers = "python_version < \"3.11\""}
+attrs = ">=17.3.0"
+frozenlist = ">=1.1.1"
+multidict = ">=4.5,<7.0"
+propcache = ">=0.2.0"
+yarl = ">=1.17.0,<2.0"
+
+[package.extras]
+speedups = ["aiodns (>=3.3.0)", "brotli", "brotlicffi", "backports.zstd"]
+
+[[package]]
+name = "aiosignal"
+version = "1.4.0"
+description = "aiosignal: a list of registered asynchronous callbacks"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+frozenlist = ">=1.1.0"
+typing-extensions = {version = ">=4.2", markers = "python_version < \"3.13\""}
+
+[[package]]
+name = "anyio"
+version = "4.11.0"
+description = "High-level concurrency and networking framework on top of asyncio or Trio"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+exceptiongroup = {version = ">=1.0.2", markers = "python_version < \"3.11\""}
+idna = ">=2.8"
+sniffio = ">=1.1"
+typing_extensions = {version = ">=4.5", markers = "python_version < \"3.13\""}
+
+[package.extras]
+trio = ["trio (>=0.31.0)"]
+
+[[package]]
+name = "async-timeout"
+version = "5.0.1"
+description = "Timeout context manager for asyncio programs"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[[package]]
+name = "attrs"
+version = "25.4.0"
+description = "Classes Without Boilerplate"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[[package]]
+name = "bitsandbytes"
+version = "0.48.2"
+description = "k-bit optimizers and matrix multiplication routines."
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+numpy = ">=1.17"
+packaging = ">=20.9"
+torch = ">=2.3,<3"
+
+[package.extras]
+benchmark = ["pandas", "matplotlib"]
+docs = ["hf-doc-builder (==0.5.0)"]
+dev = ["bitsandbytes", "build (>=1.0.0,<2)", "ruff (==0.11.2)", "pre-commit (>=3.5.0,<4)", "wheel (>=0.42,<1)"]
+test = ["einops (>=0.8.0,<0.9.0)", "lion-pytorch (==0.2.3)", "pytest (>=8.3,<9.0)", "scipy (>=1.11.4,<2)", "transformers (>=4.30.1,<5)"]
+
+[[package]]
+name = "certifi"
+version = "2025.11.12"
+description = "Python package for providing Mozilla's CA Bundle."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
+name = "charset-normalizer"
+version = "3.4.4"
+description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
+name = "colorama"
+version = "0.4.6"
+description = "Cross-platform colored terminal text."
+category = "main"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
+
+[[package]]
+name = "cut-cross-entropy"
+version = "25.1.1"
+description = "Code for cut cross entropy, a memory efficient implementation of linear-cross-entropy loss."
+category = "main"
+optional = false
+python-versions = ">=3.10"
+
+[package.dependencies]
+torch = "*"
+triton = {version = "*", markers = "platform_system == \"Linux\""}
+
+[package.extras]
+test = ["pytest"]
+transformers = ["transformers (>=4.44.2)"]
+all = ["cut-cross-entropy", "deepspeed (>=0.15.1)", "accelerate (>=0.34.2)", "datasets (>=3.1.0)", "huggingface_hub (>=0.26.2)", "pandas", "fire", "tqdm"]
+dev = ["cut-cross-entropy", "build", "twine", "pre-commit"]
+
+[[package]]
+name = "datasets"
+version = "4.3.0"
+description = "HuggingFace community-driven open-source library of datasets"
+category = "main"
+optional = false
+python-versions = ">=3.9.0"
+
+[package.dependencies]
+dill = ">=0.3.0,<0.4.1"
+filelock = "*"
+fsspec = {version = ">=2023.1.0,<=2025.9.0", extras = ["http"]}
+httpx = "<1.0.0"
+huggingface-hub = ">=0.25.0,<2.0"
+multiprocess = "<0.70.17"
+numpy = ">=1.17"
+packaging = "*"
+pandas = "*"
+pyarrow = ">=21.0.0"
+pyyaml = ">=5.1"
+requests = ">=2.32.2"
+tqdm = ">=4.66.3"
+xxhash = "*"
+
+[package.extras]
+audio = ["torchcodec (>=0.6.0)", "torch (>=2.8.0)"]
+vision = ["Pillow (>=9.4.0)"]
+tensorflow = ["tensorflow (>=2.6.0)"]
+tensorflow-gpu = ["tensorflow (>=2.6.0)"]
+torch = ["torch"]
+jax = ["jax (>=0.3.14)", "jaxlib (>=0.3.14)"]
+dev = ["numba (>=0.56.4)", "absl-py", "decorator", "joblib (<1.3.0)", "joblibspark", "pytest", "pytest-datadir", "pytest-xdist", "aiohttp", "elasticsearch (>=7.17.12,<8.0.0)", "faiss-cpu (>=1.8.0.post1)", "h5py", "jax (>=0.3.14)", "jaxlib (>=0.3.14)", "lz4", "moto", "pyspark (>=3.4)", "py7zr", "rarfile (>=4.0)", "sqlalchemy", "protobuf (<4.0.0)", "tensorflow (>=2.6.0)", "tensorflow (>=2.16.0)", "tiktoken", "torch (>=2.8.0)", "torchdata", "transformers (>=4.42.0)", "zstandard", "polars[timezone] (>=0.20.0)", "Pillow (>=9.4.0)", "torchcodec (>=0.7.0)", "ruff (>=0.3.0)", "transformers", "torch", "tensorflow (>=2.6.0)"]
+tests = ["numba (>=0.56.4)", "absl-py", "decorator", "joblib (<1.3.0)", "joblibspark", "pytest", "pytest-datadir", "pytest-xdist", "aiohttp", "elasticsearch (>=7.17.12,<8.0.0)", "faiss-cpu (>=1.8.0.post1)", "h5py", "jax (>=0.3.14)", "jaxlib (>=0.3.14)", "lz4", "moto", "pyspark (>=3.4)", "py7zr", "rarfile (>=4.0)", "sqlalchemy", "protobuf (<4.0.0)", "tensorflow (>=2.6.0)", "tensorflow (>=2.16.0)", "tiktoken", "torch (>=2.8.0)", "torchdata", "transformers (>=4.42.0)", "zstandard", "polars[timezone] (>=0.20.0)", "Pillow (>=9.4.0)", "torchcodec (>=0.7.0)"]
+tests-numpy2 = ["numba (>=0.56.4)", "absl-py", "decorator", "joblib (<1.3.0)", "joblibspark", "pytest", "pytest-datadir", "pytest-xdist", "aiohttp", "elasticsearch (>=7.17.12,<8.0.0)", "h5py", "jax (>=0.3.14)", "jaxlib (>=0.3.14)", "lz4", "moto", "pyspark (>=3.4)", "py7zr", "rarfile (>=4.0)", "sqlalchemy", "protobuf (<4.0.0)", "tiktoken", "torch (>=2.8.0)", "torchdata", "transformers (>=4.42.0)", "zstandard", "polars[timezone] (>=0.20.0)", "Pillow (>=9.4.0)", "torchcodec (>=0.7.0)"]
+quality = ["ruff (>=0.3.0)"]
+benchmarks = ["tensorflow (==2.12.0)", "torch (==2.0.1)", "transformers (==4.30.1)"]
+docs = ["transformers", "torch", "tensorflow (>=2.6.0)"]
+pdfs = ["pdfplumber (>=0.11.4)"]
+
+[[package]]
+name = "diffusers"
+version = "0.35.2"
+description = "State-of-the-art diffusion in PyTorch and JAX."
+category = "main"
+optional = false
+python-versions = ">=3.8.0"
+
+[package.dependencies]
+filelock = "*"
+huggingface-hub = ">=0.34.0"
+importlib_metadata = "*"
+numpy = "*"
+Pillow = "*"
+regex = "!=2019.12.17"
+requests = "*"
+safetensors = ">=0.3.1"
+
+[package.extras]
+quality = ["urllib3 (<=2.0.0)", "isort (>=5.5.4)", "ruff (==0.9.10)", "hf-doc-builder (>=0.3.0)"]
+docs = ["hf-doc-builder (>=0.3.0)"]
+training = ["accelerate (>=0.31.0)", "datasets", "protobuf (>=3.20.3,<4)", "tensorboard", "jinja2", "peft (>=0.17.0)"]
+test = ["compel (==0.1.8)", "GitPython (<3.1.19)", "datasets", "jinja2", "invisible-watermark (>=0.2.0)", "k-diffusion (==0.0.12)", "librosa", "parameterized", "pytest", "pytest-timeout", "pytest-xdist", "requests-mock (==1.10.0)", "safetensors (>=0.3.1)", "sentencepiece (>=0.1.91,!=0.1.92)", "scipy", "tiktoken (>=0.7.0)", "torchvision", "transformers (>=4.41.2)", "phonemizer"]
+torch = ["torch (>=1.4)", "accelerate (>=0.31.0)"]
+bitsandbytes = ["bitsandbytes (>=0.43.3)", "accelerate (>=0.31.0)"]
+gguf = ["gguf (>=0.10.0)", "accelerate (>=0.31.0)"]
+optimum-quanto = ["optimum_quanto (>=0.2.6)", "accelerate (>=0.31.0)"]
+torchao = ["torchao (>=0.7.0)", "accelerate (>=0.31.0)"]
+flax = ["jax (>=0.4.1)", "jaxlib (>=0.4.1)", "flax (>=0.4.1)"]
+dev = ["urllib3 (<=2.0.0)", "isort (>=5.5.4)", "ruff (==0.9.10)", "hf-doc-builder (>=0.3.0)", "compel (==0.1.8)", "GitPython (<3.1.19)", "datasets", "jinja2", "invisible-watermark (>=0.2.0)", "k-diffusion (==0.0.12)", "librosa", "parameterized", "pytest", "pytest-timeout", "pytest-xdist", "requests-mock (==1.10.0)", "safetensors (>=0.3.1)", "sentencepiece (>=0.1.91,!=0.1.92)", "scipy", "tiktoken (>=0.7.0)", "torchvision", "transformers (>=4.41.2)", "phonemizer", "accelerate (>=0.31.0)", "datasets", "protobuf (>=3.20.3,<4)", "tensorboard", "jinja2", "peft (>=0.17.0)", "hf-doc-builder (>=0.3.0)", "torch (>=1.4)", "accelerate (>=0.31.0)", "jax (>=0.4.1)", "jaxlib (>=0.4.1)", "flax (>=0.4.1)"]
+
+[[package]]
+name = "dill"
+version = "0.4.0"
+description = "serialize all of Python"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.extras]
+graph = ["objgraph (>=1.7.2)"]
+profile = ["gprof2dot (>=2022.7.29)"]
+
+[[package]]
+name = "docstring-parser"
+version = "0.17.0"
+description = "Parse Python docstrings in reST, Google and Numpydoc format"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.extras]
+dev = ["pre-commit (>=2.16.0)", "pydoctor (>=25.4.0)", "pytest"]
+docs = ["pydoctor (>=25.4.0)"]
+test = ["pytest"]
+
+[[package]]
+name = "exceptiongroup"
+version = "1.3.1"
+description = "Backport of PEP 654 (exception groups)"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+typing-extensions = {version = ">=4.6.0", markers = "python_version < \"3.13\""}
+
+[package.extras]
+test = ["pytest (>=6)"]
+
+[[package]]
+name = "filelock"
+version = "3.20.0"
+description = "A platform independent file lock."
+category = "main"
+optional = false
+python-versions = ">=3.10"
+
+[[package]]
+name = "frozenlist"
+version = "1.8.0"
+description = "A list-like structure which implements collections.abc.MutableSequence"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[[package]]
+name = "fsspec"
+version = "2025.9.0"
+description = "File-system specification"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+aiohttp = {version = "<4.0.0a0 || >4.0.0a0,<4.0.0a1 || >4.0.0a1", optional = true, markers = "extra == \"http\""}
+
+[package.extras]
+abfs = ["adlfs"]
+adl = ["adlfs"]
+arrow = ["pyarrow (>=1)"]
+dask = ["dask", "distributed"]
+dev = ["pre-commit", "ruff (>=0.5)"]
+doc = ["numpydoc", "sphinx", "sphinx-design", "sphinx-rtd-theme", "yarl"]
+dropbox = ["dropbox", "dropboxdrivefs", "requests"]
+full = ["adlfs", "aiohttp (!=4.0.0a0,!=4.0.0a1)", "dask", "distributed", "dropbox", "dropboxdrivefs", "fusepy", "gcsfs", "libarchive-c", "ocifs", "panel", "paramiko", "pyarrow (>=1)", "pygit2", "requests", "s3fs", "smbprotocol", "tqdm"]
+fuse = ["fusepy"]
+gcs = ["gcsfs"]
+git = ["pygit2"]
+github = ["requests"]
+gs = ["gcsfs"]
+gui = ["panel"]
+hdfs = ["pyarrow (>=1)"]
+http = ["aiohttp (!=4.0.0a0,!=4.0.0a1)"]
+libarchive = ["libarchive-c"]
+oci = ["ocifs"]
+s3 = ["s3fs"]
+sftp = ["paramiko"]
+smb = ["smbprotocol"]
+ssh = ["paramiko"]
+test = ["aiohttp (!=4.0.0a0,!=4.0.0a1)", "numpy", "pytest", "pytest-asyncio (!=0.22.0)", "pytest-benchmark", "pytest-cov", "pytest-mock", "pytest-recording", "pytest-rerunfailures", "requests"]
+test-downstream = ["aiobotocore (>=2.5.4,<3.0.0)", "dask", "moto[server] (>4,<5)", "pytest-timeout", "xarray"]
+test-full = ["adlfs", "aiohttp (!=4.0.0a0,!=4.0.0a1)", "cloudpickle", "dask", "distributed", "dropbox", "dropboxdrivefs", "fastparquet", "fusepy", "gcsfs", "jinja2", "kerchunk", "libarchive-c", "lz4", "notebook", "numpy", "ocifs", "pandas", "panel", "paramiko", "pyarrow", "pyarrow (>=1)", "pyftpdlib", "pygit2", "pytest", "pytest-asyncio (!=0.22.0)", "pytest-benchmark", "pytest-cov", "pytest-mock", "pytest-recording", "pytest-rerunfailures", "python-snappy", "requests", "smbprotocol", "tqdm", "urllib3", "zarr", "zstandard"]
+tqdm = ["tqdm"]
+
+[[package]]
+name = "h11"
+version = "0.16.0"
+description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[[package]]
+name = "hf-transfer"
+version = "0.1.9"
+description = "Speed up file transfers with the Hugging Face Hub."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
+name = "hf-xet"
+version = "1.2.1"
+description = "Fast transfer of large files with the Hugging Face Hub."
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.extras]
+tests = ["pytest"]
+
+[[package]]
+name = "httpcore"
+version = "1.0.9"
+description = "A minimal low-level HTTP client."
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.dependencies]
+certifi = "*"
+h11 = ">=0.16"
+
+[package.extras]
+asyncio = ["anyio (>=4.0,<5.0)"]
+http2 = ["h2 (>=3,<5)"]
+socks = ["socksio (>=1.0.0,<2.0.0)"]
+trio = ["trio (>=0.22.0,<1.0)"]
+
+[[package]]
+name = "httpx"
+version = "0.28.1"
+description = "The next generation HTTP client."
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.dependencies]
+anyio = "*"
+certifi = "*"
+httpcore = ">=1.0.0,<2.0.0"
+idna = "*"
+
+[package.extras]
+brotli = ["brotli", "brotlicffi"]
+cli = ["click (>=8.0.0,<9.0.0)", "pygments (>=2.0.0,<3.0.0)", "rich (>=10,<14)"]
+http2 = ["h2 (>=3,<5)"]
+socks = ["socksio (>=1.0.0,<2.0.0)"]
+zstd = ["zstandard (>=0.18.0)"]
+
+[[package]]
+name = "huggingface-hub"
+version = "0.36.0"
+description = "Client library to download and publish models, datasets and other repos on the huggingface.co hub"
+category = "main"
+optional = false
+python-versions = ">=3.8.0"
+
+[package.dependencies]
+filelock = "*"
+fsspec = ">=2023.5.0"
+hf-xet = {version = ">=1.1.3,<2.0.0", markers = "platform_machine == \"x86_64\" or platform_machine == \"amd64\" or platform_machine == \"arm64\" or platform_machine == \"aarch64\""}
+packaging = ">=20.9"
+pyyaml = ">=5.1"
+requests = "*"
+tqdm = ">=4.42.1"
+typing-extensions = ">=3.7.4.3"
+
+[package.extras]
+all = ["InquirerPy (==0.3.4)", "aiohttp", "authlib (>=1.3.2)", "fastapi", "httpx", "itsdangerous", "jedi", "jinja2", "pytest (>=8.1.1,<8.2.2)", "pytest-cov", "pytest-env", "pytest-xdist", "pytest-vcr", "pytest-asyncio", "pytest-rerunfailures (<16.0)", "pytest-mock", "urllib3 (<2.0)", "soundfile", "pillow", "gradio (>=4.0.0)", "numpy", "ruff (>=0.9.0)", "libcst (>=1.4.0)", "ty", "typing-extensions (>=4.8.0)", "types-pyyaml", "types-requests", "types-simplejson", "types-toml", "types-tqdm", "types-urllib3", "mypy (>=1.14.1,<1.15.0)", "mypy (==1.15.0)"]
+cli = ["InquirerPy (==0.3.4)"]
+dev = ["InquirerPy (==0.3.4)", "aiohttp", "authlib (>=1.3.2)", "fastapi", "httpx", "itsdangerous", "jedi", "jinja2", "pytest (>=8.1.1,<8.2.2)", "pytest-cov", "pytest-env", "pytest-xdist", "pytest-vcr", "pytest-asyncio", "pytest-rerunfailures (<16.0)", "pytest-mock", "urllib3 (<2.0)", "soundfile", "pillow", "gradio (>=4.0.0)", "numpy", "ruff (>=0.9.0)", "libcst (>=1.4.0)", "ty", "typing-extensions (>=4.8.0)", "types-pyyaml", "types-requests", "types-simplejson", "types-toml", "types-tqdm", "types-urllib3", "mypy (>=1.14.1,<1.15.0)", "mypy (==1.15.0)"]
+fastai = ["toml", "fastai (>=2.4)", "fastcore (>=1.3.27)"]
+hf-transfer = ["hf-transfer (>=0.1.4)"]
+hf-xet = ["hf-xet (>=1.1.2,<2.0.0)"]
+inference = ["aiohttp"]
+mcp = ["mcp (>=1.8.0)", "typer", "aiohttp"]
+oauth = ["authlib (>=1.3.2)", "fastapi", "httpx", "itsdangerous"]
+quality = ["ruff (>=0.9.0)", "libcst (>=1.4.0)", "ty", "mypy (>=1.14.1,<1.15.0)", "mypy (==1.15.0)"]
+tensorflow = ["tensorflow", "pydot", "graphviz"]
+tensorflow-testing = ["tensorflow", "keras (<3.0)"]
+testing = ["InquirerPy (==0.3.4)", "aiohttp", "authlib (>=1.3.2)", "fastapi", "httpx", "itsdangerous", "jedi", "jinja2", "pytest (>=8.1.1,<8.2.2)", "pytest-cov", "pytest-env", "pytest-xdist", "pytest-vcr", "pytest-asyncio", "pytest-rerunfailures (<16.0)", "pytest-mock", "urllib3 (<2.0)", "soundfile", "pillow", "gradio (>=4.0.0)", "numpy"]
+torch = ["torch", "safetensors"]
+typing = ["typing-extensions (>=4.8.0)", "types-pyyaml", "types-requests", "types-simplejson", "types-toml", "types-tqdm", "types-urllib3"]
+
+[[package]]
+name = "idna"
+version = "3.11"
+description = "Internationalized Domain Names in Applications (IDNA)"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.extras]
+all = ["ruff (>=0.6.2)", "mypy (>=1.11.2)", "pytest (>=8.3.2)", "flake8 (>=7.1.1)"]
+
+[[package]]
+name = "importlib-metadata"
+version = "8.7.0"
+description = "Read metadata from Python packages"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+zipp = ">=3.20"
+
+[package.extras]
+test = ["pytest (>=6,<8.1.0 || >=8.2.0)", "importlib_resources (>=1.3)", "packaging", "pyfakefs", "flufl.flake8", "pytest-perf (>=0.9.2)", "jaraco.test (>=5.4)"]
+doc = ["sphinx (>=3.5)", "jaraco.packaging (>=9.3)", "rst.linker (>=1.9)", "furo", "sphinx-lint", "jaraco.tidelift (>=1.4)"]
+perf = ["ipython"]
+check = ["pytest-checkdocs (>=2.4)", "pytest-ruff (>=0.2.1)"]
+cover = ["pytest-cov"]
+enabler = ["pytest-enabler (>=2.2)"]
+type = ["pytest-mypy"]
+
+[[package]]
+name = "jinja2"
+version = "3.1.6"
+description = "A very fast and expressive template engine."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+MarkupSafe = ">=2.0"
+
+[package.extras]
+i18n = ["Babel (>=2.7)"]
+
+[[package]]
+name = "markdown-it-py"
+version = "4.0.0"
+description = "Python port of markdown-it. Markdown parsing, done right!"
+category = "main"
+optional = false
+python-versions = ">=3.10"
+
+[package.dependencies]
+mdurl = ">=0.1,<1.0"
+
+[package.extras]
+benchmarking = ["psutil", "pytest", "pytest-benchmark"]
+compare = ["commonmark (>=0.9,<1.0)", "markdown (>=3.4,<4.0)", "mistletoe (>=1.0,<2.0)", "mistune (>=3.0,<4.0)", "panflute (>=2.3,<3.0)", "markdown-it-pyrs"]
+linkify = ["linkify-it-py (>=1,<3)"]
+plugins = ["mdit-py-plugins (>=0.5.0)"]
+profiling = ["gprof2dot"]
+rtd = ["mdit-py-plugins (>=0.5.0)", "myst-parser", "pyyaml", "sphinx", "sphinx-copybutton", "sphinx-design", "sphinx-book-theme (>=1.0,<2.0)", "jupyter-sphinx", "ipykernel"]
+testing = ["coverage", "pytest", "pytest-cov", "pytest-regressions", "requests"]
+
+[[package]]
+name = "markupsafe"
+version = "3.0.3"
+description = "Safely add untrusted strings to HTML/XML markup."
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[[package]]
+name = "mdurl"
+version = "0.1.2"
+description = "Markdown URL utilities"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
+name = "mpmath"
+version = "1.3.0"
+description = "Python library for arbitrary-precision floating-point arithmetic"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+develop = ["pytest (>=4.6)", "pycodestyle", "pytest-cov", "codecov", "wheel"]
+docs = ["sphinx"]
+gmpy = ["gmpy2 (>=2.1.0a4)"]
+tests = ["pytest (>=4.6)"]
+
+[[package]]
+name = "msgspec"
+version = "0.19.0"
+description = "A fast serialization and validation library, with builtin support for JSON, MessagePack, YAML, and TOML."
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.extras]
+yaml = ["pyyaml"]
+toml = ["tomli", "tomli-w"]
+doc = ["sphinx", "furo", "sphinx-copybutton", "sphinx-design", "ipython"]
+test = ["pytest", "msgpack", "attrs", "eval-type-backport", "pyyaml", "tomli", "tomli-w"]
+dev = ["pre-commit", "coverage", "mypy", "pyright", "sphinx", "furo", "sphinx-copybutton", "sphinx-design", "ipython", "pytest", "msgpack", "attrs", "eval-type-backport", "pyyaml", "tomli", "tomli-w"]
+
+[[package]]
+name = "multidict"
+version = "6.7.0"
+description = "multidict implementation"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+typing-extensions = {version = ">=4.1.0", markers = "python_version < \"3.11\""}
+
+[[package]]
+name = "multiprocess"
+version = "0.70.16"
+description = "better multiprocessing and multithreading in Python"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.dependencies]
+dill = ">=0.3.8"
+
+[[package]]
+name = "networkx"
+version = "3.4.2"
+description = "Python package for creating and manipulating graphs and networks"
+category = "main"
+optional = false
+python-versions = ">=3.10"
+
+[package.extras]
+default = ["numpy (>=1.24)", "scipy (>=1.10,!=1.11.0,!=1.11.1)", "matplotlib (>=3.7)", "pandas (>=2.0)"]
+developer = ["changelist (==0.5)", "pre-commit (>=3.2)", "mypy (>=1.1)", "rtoml"]
+doc = ["sphinx (>=7.3)", "pydata-sphinx-theme (>=0.15)", "sphinx-gallery (>=0.16)", "numpydoc (>=1.8.0)", "pillow (>=9.4)", "texext (>=0.6.7)", "myst-nb (>=1.1)", "intersphinx-registry"]
+example = ["osmnx (>=1.9)", "momepy (>=0.7.2)", "contextily (>=1.6)", "seaborn (>=0.13)", "cairocffi (>=1.7)", "igraph (>=0.11)", "scikit-learn (>=1.5)"]
+extra = ["lxml (>=4.6)", "pygraphviz (>=1.14)", "pydot (>=3.0.1)", "sympy (>=1.10)"]
+test = ["pytest (>=7.2)", "pytest-cov (>=4.0)"]
+
+[[package]]
+name = "numpy"
+version = "2.2.6"
+description = "Fundamental package for array computing in Python"
+category = "main"
+optional = false
+python-versions = ">=3.10"
+
+[[package]]
+name = "nvidia-cublas-cu12"
+version = "12.8.4.1"
+description = "CUBLAS native runtime libraries"
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[[package]]
+name = "nvidia-cuda-cupti-cu12"
+version = "12.8.90"
+description = "CUDA profiling tools runtime libs."
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[[package]]
+name = "nvidia-cuda-nvrtc-cu12"
+version = "12.8.93"
+description = "NVRTC native runtime libraries"
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[[package]]
+name = "nvidia-cuda-runtime-cu12"
+version = "12.8.90"
+description = "CUDA Runtime native Libraries"
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[[package]]
+name = "nvidia-cudnn-cu12"
+version = "9.10.2.21"
+description = "cuDNN runtime libraries"
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[package.dependencies]
+nvidia-cublas-cu12 = "*"
+
+[[package]]
+name = "nvidia-cufft-cu12"
+version = "11.3.3.83"
+description = "CUFFT native runtime libraries"
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[package.dependencies]
+nvidia-nvjitlink-cu12 = "*"
+
+[[package]]
+name = "nvidia-cufile-cu12"
+version = "1.13.1.3"
+description = "cuFile GPUDirect libraries"
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[[package]]
+name = "nvidia-curand-cu12"
+version = "10.3.9.90"
+description = "CURAND native runtime libraries"
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[[package]]
+name = "nvidia-cusolver-cu12"
+version = "11.7.3.90"
+description = "CUDA solver native runtime libraries"
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[package.dependencies]
+nvidia-cublas-cu12 = "*"
+nvidia-cusparse-cu12 = "*"
+nvidia-nvjitlink-cu12 = "*"
+
+[[package]]
+name = "nvidia-cusparse-cu12"
+version = "12.5.8.93"
+description = "CUSPARSE native runtime libraries"
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[package.dependencies]
+nvidia-nvjitlink-cu12 = "*"
+
+[[package]]
+name = "nvidia-cusparselt-cu12"
+version = "0.7.1"
+description = "NVIDIA cuSPARSELt"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "nvidia-nccl-cu12"
+version = "2.27.5"
+description = "NVIDIA Collective Communication Library (NCCL) Runtime"
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[[package]]
+name = "nvidia-nvjitlink-cu12"
+version = "12.8.93"
+description = "Nvidia JIT LTO Library"
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[[package]]
+name = "nvidia-nvshmem-cu12"
+version = "3.3.20"
+description = "NVSHMEM creates a global address space that provides efficient and scalable communication for NVIDIA GPU clusters."
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[[package]]
+name = "nvidia-nvtx-cu12"
+version = "12.8.90"
+description = "NVIDIA Tools Extension"
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[[package]]
+name = "packaging"
+version = "25.0"
+description = "Core utilities for Python packages"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[[package]]
+name = "pandas"
+version = "2.3.3"
+description = "Powerful data structures for data analysis, time series, and statistics"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+numpy = [
+    {version = ">=1.22.4", markers = "python_version < \"3.11\""},
+    {version = ">=1.23.2", markers = "python_version == \"3.11\""},
+    {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
+]
+python-dateutil = ">=2.8.2"
+pytz = ">=2020.1"
+tzdata = ">=2022.7"
+
+[package.extras]
+test = ["hypothesis (>=6.46.1)", "pytest (>=7.3.2)", "pytest-xdist (>=2.2.0)"]
+pyarrow = ["pyarrow (>=10.0.1)"]
+performance = ["bottleneck (>=1.3.6)", "numba (>=0.56.4)", "numexpr (>=2.8.4)"]
+computation = ["scipy (>=1.10.0)", "xarray (>=2022.12.0)"]
+fss = ["fsspec (>=2022.11.0)"]
+aws = ["s3fs (>=2022.11.0)"]
+gcp = ["gcsfs (>=2022.11.0)", "pandas-gbq (>=0.19.0)"]
+excel = ["odfpy (>=1.4.1)", "openpyxl (>=3.1.0)", "python-calamine (>=0.1.7)", "pyxlsb (>=1.0.10)", "xlrd (>=2.0.1)", "xlsxwriter (>=3.0.5)"]
+parquet = ["pyarrow (>=10.0.1)"]
+feather = ["pyarrow (>=10.0.1)"]
+hdf5 = ["tables (>=3.8.0)"]
+spss = ["pyreadstat (>=1.2.0)"]
+postgresql = ["SQLAlchemy (>=2.0.0)", "psycopg2 (>=2.9.6)", "adbc-driver-postgresql (>=0.8.0)"]
+mysql = ["SQLAlchemy (>=2.0.0)", "pymysql (>=1.0.2)"]
+sql-other = ["SQLAlchemy (>=2.0.0)", "adbc-driver-postgresql (>=0.8.0)", "adbc-driver-sqlite (>=0.8.0)"]
+html = ["beautifulsoup4 (>=4.11.2)", "html5lib (>=1.1)", "lxml (>=4.9.2)"]
+xml = ["lxml (>=4.9.2)"]
+plot = ["matplotlib (>=3.6.3)"]
+output-formatting = ["jinja2 (>=3.1.2)", "tabulate (>=0.9.0)"]
+clipboard = ["PyQt5 (>=5.15.9)", "qtpy (>=2.3.0)"]
+compression = ["zstandard (>=0.19.0)"]
+consortium-standard = ["dataframe-api-compat (>=0.1.7)"]
+all = ["adbc-driver-postgresql (>=0.8.0)", "adbc-driver-sqlite (>=0.8.0)", "beautifulsoup4 (>=4.11.2)", "bottleneck (>=1.3.6)", "dataframe-api-compat (>=0.1.7)", "fastparquet (>=2022.12.0)", "fsspec (>=2022.11.0)", "gcsfs (>=2022.11.0)", "html5lib (>=1.1)", "hypothesis (>=6.46.1)", "jinja2 (>=3.1.2)", "lxml (>=4.9.2)", "matplotlib (>=3.6.3)", "numba (>=0.56.4)", "numexpr (>=2.8.4)", "odfpy (>=1.4.1)", "openpyxl (>=3.1.0)", "pandas-gbq (>=0.19.0)", "psycopg2 (>=2.9.6)", "pyarrow (>=10.0.1)", "pymysql (>=1.0.2)", "PyQt5 (>=5.15.9)", "pyreadstat (>=1.2.0)", "pytest (>=7.3.2)", "pytest-xdist (>=2.2.0)", "python-calamine (>=0.1.7)", "pyxlsb (>=1.0.10)", "qtpy (>=2.3.0)", "scipy (>=1.10.0)", "s3fs (>=2022.11.0)", "SQLAlchemy (>=2.0.0)", "tables (>=3.8.0)", "tabulate (>=0.9.0)", "xarray (>=2022.12.0)", "xlrd (>=2.0.1)", "xlsxwriter (>=3.0.5)", "zstandard (>=0.19.0)"]
+
+[[package]]
+name = "peft"
+version = "0.18.0"
+description = "Parameter-Efficient Fine-Tuning (PEFT)"
+category = "main"
+optional = false
+python-versions = ">=3.10.0"
+
+[package.dependencies]
+accelerate = ">=0.21.0"
+huggingface_hub = ">=0.25.0"
+numpy = ">=1.17"
+packaging = ">=20.0"
+psutil = "*"
+pyyaml = "*"
+safetensors = "*"
+torch = ">=1.13.0"
+tqdm = "*"
+transformers = "*"
+
+[package.extras]
+quality = ["black", "hf-doc-builder", "ruff (>=0.12.8,<0.13.0)"]
+docs-specific = ["black", "hf-doc-builder"]
+dev = ["black", "hf-doc-builder", "ruff (>=0.12.8,<0.13.0)", "black", "hf-doc-builder"]
+test = ["black", "hf-doc-builder", "ruff (>=0.12.8,<0.13.0)", "black", "hf-doc-builder", "pytest", "pytest-cov", "pytest-xdist", "parameterized", "datasets", "diffusers", "scipy", "protobuf", "sentencepiece"]
+
+[[package]]
+name = "pillow"
+version = "12.0.0"
+description = "Python Imaging Library (fork)"
+category = "main"
+optional = false
+python-versions = ">=3.10"
+
+[package.extras]
+docs = ["furo", "olefile", "sphinx (>=8.2)", "sphinx-autobuild", "sphinx-copybutton", "sphinx-inline-tabs", "sphinxext-opengraph"]
+fpx = ["olefile"]
+mic = ["olefile"]
+test-arrow = ["arro3-compute", "arro3-core", "nanoarrow", "pyarrow"]
+tests = ["check-manifest", "coverage (>=7.4.2)", "defusedxml", "markdown2", "olefile", "packaging", "pyroma (>=5)", "pytest", "pytest-cov", "pytest-timeout", "pytest-xdist", "trove-classifiers (>=2024.10.12)"]
+xmp = ["defusedxml"]
+
+[[package]]
+name = "propcache"
+version = "0.4.1"
+description = "Accelerated property cache"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[[package]]
+name = "protobuf"
+version = "6.33.1"
+description = ""
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[[package]]
+name = "psutil"
+version = "7.1.3"
+description = "Cross-platform lib for process and system monitoring."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+dev = ["pytest", "pytest-instafail", "pytest-subtests", "pytest-xdist", "setuptools", "pywin32", "wheel", "wmi", "abi3audit", "black", "check-manifest", "colorama", "coverage", "packaging", "pylint", "pyperf", "pypinfo", "pyreadline", "pytest-cov", "requests", "rstcheck", "ruff", "sphinx", "sphinx-rtd-theme", "toml-sort", "twine", "validate-pyproject", "virtualenv", "vulture", "wheel"]
+test = ["pytest", "pytest-instafail", "pytest-subtests", "pytest-xdist", "setuptools", "pywin32", "wheel", "wmi"]
+
+[[package]]
+name = "pyarrow"
+version = "22.0.0"
+description = "Python library for Apache Arrow"
+category = "main"
+optional = false
+python-versions = ">=3.10"
+
+[[package]]
+name = "pygments"
+version = "2.19.2"
+description = "Pygments is a syntax highlighting package written in Python."
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.extras]
+windows-terminal = ["colorama (>=0.4.6)"]
+
+[[package]]
+name = "python-dateutil"
+version = "2.9.0.post0"
+description = "Extensions to the standard Python datetime module"
+category = "main"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
+
+[package.dependencies]
+six = ">=1.5"
+
+[[package]]
+name = "pytz"
+version = "2025.2"
+description = "World timezone definitions, modern and historical"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "pyyaml"
+version = "6.0.3"
+description = "YAML parser and emitter for Python"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[[package]]
+name = "regex"
+version = "2025.11.3"
+description = "Alternative regular expression module, to replace re."
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[[package]]
+name = "requests"
+version = "2.32.5"
+description = "Python HTTP for Humans."
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+certifi = ">=2017.4.17"
+charset_normalizer = ">=2,<4"
+idna = ">=2.5,<4"
+urllib3 = ">=1.21.1,<3"
+
+[package.extras]
+socks = ["PySocks (>=1.5.6,!=1.5.7)"]
+use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
+
+[[package]]
+name = "rich"
+version = "14.2.0"
+description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
+category = "main"
+optional = false
+python-versions = ">=3.8.0"
+
+[package.dependencies]
+markdown-it-py = ">=2.2.0"
+pygments = ">=2.13.0,<3.0.0"
+
+[package.extras]
+jupyter = ["ipywidgets (>=7.5.1,<9)"]
+
+[[package]]
+name = "safetensors"
+version = "0.7.0"
+description = ""
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.extras]
+numpy = ["numpy (>=1.21.6)"]
+torch = ["packaging", "safetensors", "torch (>=1.10)"]
+tensorflow = ["safetensors", "tensorflow (>=2.11.0)"]
+pinned-tf = ["safetensors", "tensorflow (==2.18.0)"]
+jax = ["safetensors", "flax (>=0.6.3)", "jax (>=0.3.25)", "jaxlib (>=0.3.25)"]
+mlx = ["mlx (>=0.0.9)"]
+paddlepaddle = ["safetensors", "paddlepaddle (>=2.4.1)"]
+quality = ["ruff"]
+testing = ["safetensors", "h5py (>=3.7.0)", "huggingface-hub (>=0.12.1)", "setuptools-rust (>=1.5.2)", "pytest (>=7.2.0)", "pytest-benchmark (>=4.0.0)", "hypothesis (>=6.70.2)"]
+testingfree = ["safetensors", "huggingface-hub (>=0.12.1)", "setuptools-rust (>=1.5.2)", "pytest (>=7.2.0)", "pytest-benchmark (>=4.0.0)", "hypothesis (>=6.70.2)"]
+all = ["safetensors", "safetensors", "safetensors", "safetensors", "safetensors", "safetensors", "safetensors"]
+dev = ["safetensors"]
+
+[[package]]
+name = "sentencepiece"
+version = "0.2.1"
+description = "Unsupervised text tokenizer and detokenizer."
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.extras]
+test = ["pytest"]
+testpaths = ["test"]
+
+[[package]]
+name = "shtab"
+version = "1.8.0"
+description = "Automagic shell tab completion for Python CLI applications"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.extras]
+dev = ["pytest (>=6)", "pytest-cov", "pytest-timeout"]
+
+[[package]]
+name = "six"
+version = "1.17.0"
+description = "Python 2 and 3 compatibility utilities"
+category = "main"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
+
+[[package]]
+name = "sniffio"
+version = "1.3.1"
+description = "Sniff out which async library your code is running under"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
+name = "sympy"
+version = "1.14.0"
+description = "Computer algebra system (CAS) in Python"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+mpmath = ">=1.1.0,<1.4"
+
+[package.extras]
+dev = ["pytest (>=7.1.0)", "hypothesis (>=6.70.0)"]
+
+[[package]]
+name = "tokenizers"
+version = "0.22.1"
+description = ""
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+huggingface-hub = ">=0.16.4,<2.0"
+
+[package.extras]
+testing = ["pytest", "pytest-asyncio", "requests", "numpy", "datasets", "black (==22.3)", "ruff"]
+docs = ["sphinx", "sphinx-rtd-theme", "setuptools-rust"]
+dev = ["tokenizers"]
+
+[[package]]
+name = "torch"
+version = "2.9.0"
+description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration"
+category = "main"
+optional = false
+python-versions = ">=3.10"
+
+[package.dependencies]
+filelock = "*"
+fsspec = ">=0.8.5"
+jinja2 = "*"
+networkx = ">=2.5.1"
+nvidia-cublas-cu12 = {version = "12.8.4.1", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+nvidia-cuda-cupti-cu12 = {version = "12.8.90", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+nvidia-cuda-nvrtc-cu12 = {version = "12.8.93", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+nvidia-cuda-runtime-cu12 = {version = "12.8.90", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+nvidia-cudnn-cu12 = {version = "9.10.2.21", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+nvidia-cufft-cu12 = {version = "11.3.3.83", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+nvidia-cufile-cu12 = {version = "1.13.1.3", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+nvidia-curand-cu12 = {version = "10.3.9.90", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+nvidia-cusolver-cu12 = {version = "11.7.3.90", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+nvidia-cusparse-cu12 = {version = "12.5.8.93", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+nvidia-cusparselt-cu12 = {version = "0.7.1", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+nvidia-nccl-cu12 = {version = "2.27.5", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+nvidia-nvjitlink-cu12 = {version = "12.8.93", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+nvidia-nvshmem-cu12 = {version = "3.3.20", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+nvidia-nvtx-cu12 = {version = "12.8.90", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+sympy = ">=1.13.3"
+triton = {version = "3.5.0", markers = "platform_system == \"Linux\" and platform_machine == \"x86_64\""}
+typing-extensions = ">=4.10.0"
+
+[package.extras]
+optree = ["optree (>=0.13.0)"]
+opt-einsum = ["opt-einsum (>=3.3)"]
+pyyaml = ["pyyaml"]
+
+[[package]]
+name = "torchao"
+version = "0.14.1"
+description = "Package for applying ao techniques to GPU models"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+dev = ["pytest", "unittest-xml-reporting", "parameterized", "packaging", "transformers", "hypothesis", "sentencepiece", "expecttest", "bitsandbytes", "matplotlib", "pandas", "fire", "tabulate", "tiktoken", "blobfile", "lm-eval", "diskcache", "pycocotools", "tqdm", "importlib-metadata", "ninja", "cmake (>=3.19.0,<4.0.0)", "ruff (==0.11.6)", "pre-commit"]
+
+[[package]]
+name = "torchvision"
+version = "0.24.0"
+description = "image and video datasets and models for torch deep learning"
+category = "main"
+optional = false
+python-versions = ">=3.10"
+
+[package.dependencies]
+numpy = "*"
+pillow = ">=5.3.0,<8.3.0 || >=8.4.0"
+torch = "2.9.0"
+
+[package.extras]
+gdown = ["gdown (>=4.7.3)"]
+scipy = ["scipy"]
+
+[[package]]
+name = "tqdm"
+version = "4.67.1"
+description = "Fast, Extensible Progress Meter"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[package.extras]
+dev = ["pytest (>=6)", "pytest-cov", "pytest-timeout", "pytest-asyncio (>=0.24)", "nbval"]
+discord = ["requests"]
+slack = ["slack-sdk"]
+telegram = ["requests"]
+notebook = ["ipywidgets (>=6)"]
+
+[[package]]
+name = "transformers"
+version = "4.57.1"
+description = "State-of-the-art Machine Learning for JAX, PyTorch and TensorFlow"
+category = "main"
+optional = false
+python-versions = ">=3.9.0"
+
+[package.dependencies]
+filelock = "*"
+huggingface-hub = ">=0.34.0,<1.0"
+numpy = ">=1.17"
+packaging = ">=20.0"
+pyyaml = ">=5.1"
+regex = "!=2019.12.17"
+requests = "*"
+safetensors = ">=0.4.3"
+tokenizers = ">=0.22.0,<=0.23.0"
+tqdm = ">=4.27"
+
+[package.extras]
+ja = ["fugashi (>=1.0)", "ipadic (>=1.0.0,<2.0)", "unidic_lite (>=1.0.7)", "unidic (>=1.0.2)", "sudachipy (>=0.6.6)", "sudachidict_core (>=20220729)", "rhoknp (>=1.1.0,<1.3.1)"]
+sklearn = ["scikit-learn"]
+tf = ["tensorflow (>2.9,<2.16)", "onnxconverter-common", "tf2onnx", "tensorflow-text (<2.16)", "keras-nlp (>=0.3.1,<0.14.0)"]
+tf-cpu = ["keras (>2.9,<2.16)", "tensorflow-cpu (>2.9,<2.16)", "onnxconverter-common", "tf2onnx", "tensorflow-text (<2.16)", "keras-nlp (>=0.3.1,<0.14.0)", "tensorflow-probability (<0.24)"]
+torch = ["torch (>=2.2)", "accelerate (>=0.26.0)"]
+accelerate = ["accelerate (>=0.26.0)"]
+hf-xet = ["hf-xet"]
+retrieval = ["faiss-cpu", "datasets (>=2.15.0)"]
+flax = ["jax (>=0.4.1,<=0.4.13)", "jaxlib (>=0.4.1,<=0.4.13)", "flax (>=0.4.1,<=0.7.0)", "optax (>=0.0.8,<=0.1.4)", "scipy (<1.13.0)"]
+tokenizers = ["tokenizers (>=0.22.0,<=0.23.0)"]
+ftfy = ["ftfy"]
+onnxruntime = ["onnxruntime (>=1.4.0)", "onnxruntime-tools (>=1.4.2)"]
+onnx = ["onnxconverter-common", "tf2onnx", "onnxruntime (>=1.4.0)", "onnxruntime-tools (>=1.4.2)"]
+modelcreation = ["cookiecutter (==1.7.3)"]
+sagemaker = ["sagemaker (>=2.31.0)"]
+deepspeed = ["deepspeed (>=0.9.3)", "accelerate (>=0.26.0)"]
+optuna = ["optuna"]
+ray = ["ray[tune] (>=2.7.0)"]
+sigopt = ["sigopt"]
+hub-kernels = ["kernels (>=0.6.1,<=0.9)"]
+integrations = ["kernels (>=0.6.1,<=0.9)", "optuna", "ray[tune] (>=2.7.0)"]
+serving = ["openai (>=1.98.0)", "pydantic (>=2)", "uvicorn", "fastapi", "starlette", "torch (>=2.2)", "accelerate (>=0.26.0)"]
+audio = ["librosa", "pyctcdecode (>=0.4.0)", "phonemizer", "kenlm"]
+speech = ["torchaudio", "librosa", "pyctcdecode (>=0.4.0)", "phonemizer", "kenlm"]
+torch-speech = ["torchaudio", "librosa", "pyctcdecode (>=0.4.0)", "phonemizer", "kenlm"]
+tf-speech = ["librosa", "pyctcdecode (>=0.4.0)", "phonemizer", "kenlm"]
+flax-speech = ["librosa", "pyctcdecode (>=0.4.0)", "phonemizer", "kenlm"]
+vision = ["Pillow (>=10.0.1,<=15.0)"]
+timm = ["timm (!=1.0.18,<=1.0.19)"]
+torch-vision = ["torchvision", "Pillow (>=10.0.1,<=15.0)"]
+natten = ["natten (>=0.14.6,<0.15.0)"]
+codecarbon = ["codecarbon (>=2.8.1)"]
+video = ["av"]
+num2words = ["num2words"]
+sentencepiece = ["sentencepiece (>=0.1.91,!=0.1.92)", "protobuf"]
+tiktoken = ["tiktoken", "blobfile"]
+mistral-common = ["mistral-common[opencv] (>=1.6.3)"]
+chat-template = ["jinja2 (>=3.1.0)"]
+testing = ["pytest (>=7.2.0)", "pytest-asyncio", "pytest-rich", "pytest-xdist", "pytest-order", "pytest-rerunfailures (<16.0)", "timeout-decorator", "parameterized (>=0.9)", "psutil", "datasets (>=2.15.0)", "dill (<0.3.5)", "evaluate (>=0.2.0)", "pytest-timeout", "ruff (==0.13.1)", "rouge-score (!=0.0.7,!=0.0.8,!=0.1,!=0.1.1)", "nltk (<=3.8.1)", "GitPython (<3.1.19)", "sacremoses", "rjieba", "beautifulsoup4", "tensorboard", "pydantic (>=2)", "sentencepiece (>=0.1.91,!=0.1.92)", "sacrebleu (>=1.4.12,<2.0.0)", "libcst", "faiss-cpu", "datasets (>=2.15.0)", "cookiecutter (==1.7.3)", "mistral-common[opencv] (>=1.6.3)", "openai (>=1.98.0)", "pydantic (>=2)", "uvicorn", "fastapi", "starlette", "torch (>=2.2)", "accelerate (>=0.26.0)"]
+deepspeed-testing = ["deepspeed (>=0.9.3)", "accelerate (>=0.26.0)", "pytest (>=7.2.0)", "pytest-asyncio", "pytest-rich", "pytest-xdist", "pytest-order", "pytest-rerunfailures (<16.0)", "timeout-decorator", "parameterized (>=0.9)", "psutil", "datasets (>=2.15.0)", "dill (<0.3.5)", "evaluate (>=0.2.0)", "pytest-timeout", "ruff (==0.13.1)", "rouge-score (!=0.0.7,!=0.0.8,!=0.1,!=0.1.1)", "nltk (<=3.8.1)", "GitPython (<3.1.19)", "sacremoses", "rjieba", "beautifulsoup4", "tensorboard", "pydantic (>=2)", "sentencepiece (>=0.1.91,!=0.1.92)", "sacrebleu (>=1.4.12,<2.0.0)", "libcst", "faiss-cpu", "datasets (>=2.15.0)", "cookiecutter (==1.7.3)", "mistral-common[opencv] (>=1.6.3)", "openai (>=1.98.0)", "pydantic (>=2)", "uvicorn", "fastapi", "starlette", "torch (>=2.2)", "accelerate (>=0.26.0)", "optuna", "sentencepiece (>=0.1.91,!=0.1.92)", "protobuf"]
+ruff = ["ruff (==0.13.1)"]
+quality = ["datasets (>=2.15.0)", "ruff (==0.13.1)", "GitPython (<3.1.19)", "urllib3 (<2.0.0)", "libcst", "rich", "pandas (<2.3.0)"]
+all = ["tensorflow (>2.9,<2.16)", "onnxconverter-common", "tf2onnx", "tensorflow-text (<2.16)", "keras-nlp (>=0.3.1,<0.14.0)", "torch (>=2.2)", "accelerate (>=0.26.0)", "jax (>=0.4.1,<=0.4.13)", "jaxlib (>=0.4.1,<=0.4.13)", "flax (>=0.4.1,<=0.7.0)", "optax (>=0.0.8,<=0.1.4)", "scipy (<1.13.0)", "sentencepiece (>=0.1.91,!=0.1.92)", "protobuf", "tokenizers (>=0.22.0,<=0.23.0)", "torchaudio", "librosa", "pyctcdecode (>=0.4.0)", "phonemizer", "kenlm", "Pillow (>=10.0.1,<=15.0)", "kernels (>=0.6.1,<=0.9)", "optuna", "ray[tune] (>=2.7.0)", "timm (!=1.0.18,<=1.0.19)", "torchvision", "Pillow (>=10.0.1,<=15.0)", "codecarbon (>=2.8.1)", "accelerate (>=0.26.0)", "av", "num2words", "mistral-common[opencv] (>=1.6.3)", "jinja2 (>=3.1.0)"]
+dev-torch = ["pytest (>=7.2.0)", "pytest-asyncio", "pytest-rich", "pytest-xdist", "pytest-order", "pytest-rerunfailures (<16.0)", "timeout-decorator", "parameterized (>=0.9)", "psutil", "datasets (>=2.15.0)", "dill (<0.3.5)", "evaluate (>=0.2.0)", "pytest-timeout", "ruff (==0.13.1)", "rouge-score (!=0.0.7,!=0.0.8,!=0.1,!=0.1.1)", "nltk (<=3.8.1)", "GitPython (<3.1.19)", "sacremoses", "rjieba", "beautifulsoup4", "tensorboard", "pydantic (>=2)", "sentencepiece (>=0.1.91,!=0.1.92)", "sacrebleu (>=1.4.12,<2.0.0)", "libcst", "faiss-cpu", "datasets (>=2.15.0)", "cookiecutter (==1.7.3)", "mistral-common[opencv] (>=1.6.3)", "openai (>=1.98.0)", "pydantic (>=2)", "uvicorn", "fastapi", "starlette", "torch (>=2.2)", "accelerate (>=0.26.0)", "torch (>=2.2)", "accelerate (>=0.26.0)", "sentencepiece (>=0.1.91,!=0.1.92)", "protobuf", "tokenizers (>=0.22.0,<=0.23.0)", "torchaudio", "librosa", "pyctcdecode (>=0.4.0)", "phonemizer", "kenlm", "Pillow (>=10.0.1,<=15.0)", "kernels (>=0.6.1,<=0.9)", "optuna", "ray[tune] (>=2.7.0)", "timm (!=1.0.18,<=1.0.19)", "torchvision", "Pillow (>=10.0.1,<=15.0)", "codecarbon (>=2.8.1)", "datasets (>=2.15.0)", "ruff (==0.13.1)", "GitPython (<3.1.19)", "urllib3 (<2.0.0)", "libcst", "rich", "pandas (<2.3.0)", "fugashi (>=1.0)", "ipadic (>=1.0.0,<2.0)", "unidic_lite (>=1.0.7)", "unidic (>=1.0.2)", "sudachipy (>=0.6.6)", "sudachidict_core (>=20220729)", "rhoknp (>=1.1.0,<1.3.1)", "scikit-learn", "cookiecutter (==1.7.3)", "onnxruntime (>=1.4.0)", "onnxruntime-tools (>=1.4.2)", "num2words"]
+dev-tensorflow = ["pytest (>=7.2.0)", "pytest-asyncio", "pytest-rich", "pytest-xdist", "pytest-order", "pytest-rerunfailures (<16.0)", "timeout-decorator", "parameterized (>=0.9)", "psutil", "datasets (>=2.15.0)", "dill (<0.3.5)", "evaluate (>=0.2.0)", "pytest-timeout", "ruff (==0.13.1)", "rouge-score (!=0.0.7,!=0.0.8,!=0.1,!=0.1.1)", "nltk (<=3.8.1)", "GitPython (<3.1.19)", "sacremoses", "rjieba", "beautifulsoup4", "tensorboard", "pydantic (>=2)", "sentencepiece (>=0.1.91,!=0.1.92)", "sacrebleu (>=1.4.12,<2.0.0)", "libcst", "faiss-cpu", "datasets (>=2.15.0)", "cookiecutter (==1.7.3)", "mistral-common[opencv] (>=1.6.3)", "openai (>=1.98.0)", "pydantic (>=2)", "uvicorn", "fastapi", "starlette", "torch (>=2.2)", "accelerate (>=0.26.0)", "tensorflow (>2.9,<2.16)", "onnxconverter-common", "tf2onnx", "tensorflow-text (<2.16)", "keras-nlp (>=0.3.1,<0.14.0)", "sentencepiece (>=0.1.91,!=0.1.92)", "protobuf", "tokenizers (>=0.22.0,<=0.23.0)", "Pillow (>=10.0.1,<=15.0)", "datasets (>=2.15.0)", "ruff (==0.13.1)", "GitPython (<3.1.19)", "urllib3 (<2.0.0)", "libcst", "rich", "pandas (<2.3.0)", "scikit-learn", "cookiecutter (==1.7.3)", "onnxconverter-common", "tf2onnx", "onnxruntime (>=1.4.0)", "onnxruntime-tools (>=1.4.2)", "librosa", "pyctcdecode (>=0.4.0)", "phonemizer", "kenlm"]
+dev = ["tensorflow (>2.9,<2.16)", "onnxconverter-common", "tf2onnx", "tensorflow-text (<2.16)", "keras-nlp (>=0.3.1,<0.14.0)", "torch (>=2.2)", "accelerate (>=0.26.0)", "jax (>=0.4.1,<=0.4.13)", "jaxlib (>=0.4.1,<=0.4.13)", "flax (>=0.4.1,<=0.7.0)", "optax (>=0.0.8,<=0.1.4)", "scipy (<1.13.0)", "sentencepiece (>=0.1.91,!=0.1.92)", "protobuf", "tokenizers (>=0.22.0,<=0.23.0)", "torchaudio", "librosa", "pyctcdecode (>=0.4.0)", "phonemizer", "kenlm", "Pillow (>=10.0.1,<=15.0)", "kernels (>=0.6.1,<=0.9)", "optuna", "ray[tune] (>=2.7.0)", "timm (!=1.0.18,<=1.0.19)", "torchvision", "Pillow (>=10.0.1,<=15.0)", "codecarbon (>=2.8.1)", "accelerate (>=0.26.0)", "av", "num2words", "mistral-common[opencv] (>=1.6.3)", "jinja2 (>=3.1.0)", "pytest (>=7.2.0)", "pytest-asyncio", "pytest-rich", "pytest-xdist", "pytest-order", "pytest-rerunfailures (<16.0)", "timeout-decorator", "parameterized (>=0.9)", "psutil", "datasets (>=2.15.0)", "dill (<0.3.5)", "evaluate (>=0.2.0)", "pytest-timeout", "ruff (==0.13.1)", "rouge-score (!=0.0.7,!=0.0.8,!=0.1,!=0.1.1)", "nltk (<=3.8.1)", "GitPython (<3.1.19)", "sacremoses", "rjieba", "beautifulsoup4", "tensorboard", "pydantic (>=2)", "sentencepiece (>=0.1.91,!=0.1.92)", "sacrebleu (>=1.4.12,<2.0.0)", "libcst", "faiss-cpu", "datasets (>=2.15.0)", "cookiecutter (==1.7.3)", "mistral-common[opencv] (>=1.6.3)", "openai (>=1.98.0)", "pydantic (>=2)", "uvicorn", "fastapi", "starlette", "torch (>=2.2)", "accelerate (>=0.26.0)", "datasets (>=2.15.0)", "ruff (==0.13.1)", "GitPython (<3.1.19)", "urllib3 (<2.0.0)", "libcst", "rich", "pandas (<2.3.0)", "fugashi (>=1.0)", "ipadic (>=1.0.0,<2.0)", "unidic_lite (>=1.0.7)", "unidic (>=1.0.2)", "sudachipy (>=0.6.6)", "sudachidict_core (>=20220729)", "rhoknp (>=1.1.0,<1.3.1)", "scikit-learn", "cookiecutter (==1.7.3)"]
+torchhub = ["filelock", "huggingface-hub (>=0.34.0,<1.0)", "importlib-metadata", "numpy (>=1.17)", "packaging (>=20.0)", "protobuf", "regex (!=2019.12.17)", "requests", "sentencepiece (>=0.1.91,!=0.1.92)", "torch (>=2.2)", "tokenizers (>=0.22.0,<=0.23.0)", "tqdm (>=4.27)"]
+benchmark = ["optimum-benchmark (>=0.3.0)"]
+open-telemetry = ["opentelemetry-api", "opentelemetry-exporter-otlp", "opentelemetry-sdk"]
+
+[[package]]
+name = "triton"
+version = "3.5.0"
+description = "A language and compiler for custom Deep Learning operations"
+category = "main"
+optional = false
+python-versions = "<3.15,>=3.10"
+
+[package.extras]
+build = ["cmake (>=3.20,<4.0)", "lit"]
+tests = ["autopep8", "isort", "numpy", "pytest", "pytest-forked", "pytest-xdist", "scipy (>=1.7.1)", "llnl-hatchet"]
+tutorials = ["matplotlib", "pandas", "tabulate"]
+
+[[package]]
+name = "triton-windows"
+version = "3.5.1.post21"
+description = "A language and compiler for custom Deep Learning operations"
+category = "main"
+optional = false
+python-versions = "<3.15,>=3.10"
+
+[package.extras]
+build = ["cmake (>=3.20,<4.0)", "lit"]
+tests = ["autopep8", "isort", "numpy", "pytest", "pytest-forked", "pytest-xdist", "scipy (>=1.7.1)", "llnl-hatchet"]
+tutorials = ["matplotlib", "pandas", "tabulate"]
+
+[[package]]
+name = "trl"
+version = "0.23.0"
+description = "Train transformer language models with reinforcement learning."
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+accelerate = ">=1.4.0"
+datasets = ">=3.0.0"
+transformers = ">=4.56.1"
+
+[package.extras]
+bco = ["scikit-learn", "joblib"]
+deepspeed = ["deepspeed (>=0.14.4)"]
+diffusers = ["diffusers (>=0.18.0)", "ftfy"]
+judges = ["openai (>=1.23.2)", "llm-blender (>=0.0.2)"]
+liger = ["liger-kernel (>=0.6.2)"]
+peft = ["peft (>=0.8.0)"]
+quality = ["pre-commit", "hf-doc-builder"]
+quantization = ["bitsandbytes"]
+scikit = ["scikit-learn"]
+test = ["parameterized", "pytest-cov", "pytest-rerunfailures (==15.1)", "pytest-xdist", "pytest"]
+vllm = ["vllm (>=0.10.0)", "fastapi", "pydantic", "requests", "uvicorn"]
+vlm = ["pillow", "torchvision", "num2words"]
+dev = ["scikit-learn", "joblib", "deepspeed (>=0.14.4)", "diffusers (>=0.18.0)", "ftfy", "openai (>=1.23.2)", "llm-blender (>=0.0.2)", "liger-kernel (>=0.6.2)", "peft (>=0.8.0)", "pre-commit", "hf-doc-builder", "bitsandbytes", "scikit-learn", "parameterized", "pytest-cov", "pytest-rerunfailures (==15.1)", "pytest-xdist", "pytest", "pillow", "torchvision", "num2words"]
+
+[[package]]
+name = "typeguard"
+version = "4.4.4"
+description = "Run-time type checker for Python"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+typing_extensions = ">=4.14.0"
+
+[[package]]
+name = "typing-extensions"
+version = "4.15.0"
+description = "Backported and Experimental Type Hints for Python 3.9+"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[[package]]
+name = "tyro"
+version = "0.9.35"
+description = "CLI interfaces & config objects, from types"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.dependencies]
+colorama = {version = ">=0.4.0", markers = "platform_system == \"Windows\""}
+docstring-parser = ">=0.15"
+rich = ">=11.1.0"
+shtab = ">=1.5.6"
+typeguard = ">=4.0.0"
+typing-extensions = ">=4.13.0"
+
+[package.extras]
+dev = ["attrs (>=21.4.0)", "coverage[toml] (>=6.5.0)", "eval-type-backport (>=0.1.3)", "ml-collections (>=0.1.0)", "msgspec (>=0.18.6)", "mypy (>=1.4.1)", "omegaconf (>=2.2.2)", "pydantic (>=2.5.2,!=2.10.0)", "pyright (>=1.1.349,!=1.1.379)", "pytest-cov (>=3.0.0)", "pytest-xdist (>=3.5.0)", "pytest (>=7.1.2)", "pyyaml (>=6.0)", "ruff (>=0.1.13)"]
+dev-nn = ["attrs (>=21.4.0)", "coverage[toml] (>=6.5.0)", "eval-type-backport (>=0.1.3)", "flax (>=0.6.9)", "ml-collections (>=0.1.0)", "msgspec (>=0.18.6)", "mypy (>=1.4.1)", "numpy (>=1.20.0)", "omegaconf (>=2.2.2)", "pydantic (>=2.5.2,!=2.10.0)", "pyright (>=1.1.349,!=1.1.379)", "pytest-cov (>=3.0.0)", "pytest-xdist (>=3.5.0)", "pytest (>=7.1.2)", "pyyaml (>=6.0)", "ruff (>=0.1.13)", "torch (>=1.10.0)"]
+
+[[package]]
+name = "tzdata"
+version = "2025.2"
+description = "Provider of IANA time zone data"
+category = "main"
+optional = false
+python-versions = ">=2"
+
+[[package]]
+name = "unsloth"
+version = "2025.11.3"
+description = "2-5X faster training, reinforcement learning & finetuning"
+category = "main"
+optional = false
+python-versions = "<3.14,>=3.9"
+
+[package.dependencies]
+accelerate = ">=0.34.1"
+bitsandbytes = ">=0.45.5,<0.46.0 || >0.46.0,<0.48.0 || >0.48.0"
+datasets = ">=3.4.1,<4.0.0 || >4.1.0,<4.4.0"
+diffusers = "*"
+hf_transfer = "*"
+huggingface_hub = ">=0.34.0"
+numpy = "*"
+packaging = "*"
+peft = ">=0.7.1,<0.11.0 || >0.11.0"
+protobuf = "*"
+psutil = "*"
+sentencepiece = ">=0.2.0"
+torch = ">=2.4.0"
+torchvision = "*"
+tqdm = "*"
+transformers = ">=4.51.3,<4.52.0 || >4.52.0,<4.52.1 || >4.52.1,<4.52.2 || >4.52.2,<4.52.3 || >4.52.3,<4.53.0 || >4.53.0,<4.54.0 || >4.54.0,<4.55.0 || >4.55.0,<4.55.1 || >4.55.1,<4.57.0 || >4.57.0,<=4.57.2"
+triton = {version = ">=3.0.0", markers = "sys_platform in \"linux\""}
+triton-windows = {version = "*", markers = "sys_platform == \"win32\" and (platform_machine == \"AMD64\" or platform_machine == \"x86_64\")"}
+trl = ">=0.18.2,<0.19.0 || >0.19.0,<=0.23.0"
+tyro = "*"
+unsloth_zoo = ">=2025.11.4"
+xformers = {version = ">=0.0.27.post2", markers = "(sys_platform in \"linux\" or sys_platform == \"win32\") and (platform_machine == \"AMD64\" or platform_machine == \"x86_64\")"}
+
+[package.extras]
+huggingface = ["unsloth_zoo (>=2025.11.4)", "wheel (>=0.42.0)", "packaging", "torchvision", "numpy", "tqdm", "psutil", "tyro", "protobuf", "sentencepiece (>=0.2.0)", "datasets (>=3.4.1,<4.0.0 || >4.1.0,<4.4.0)", "accelerate (>=0.34.1)", "peft (>=0.7.1,!=0.11.0)", "huggingface_hub (>=0.34.0)", "hf-transfer", "diffusers", "transformers (>=4.51.3,!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,!=4.57.0,<=4.57.2)", "trl (>=0.18.2,!=0.19.0,<=0.23.0)"]
+base = ["unsloth"]
+cu118only = ["xformers (==0.0.22.post7)"]
+cu121only = ["xformers (==0.0.22.post7)"]
+cu118onlytorch211 = ["xformers (==0.0.23)"]
+cu121onlytorch211 = ["xformers (==0.0.23)"]
+cu118onlytorch212 = ["xformers (==0.0.23.post1)"]
+cu121onlytorch212 = ["xformers (==0.0.23.post1)"]
+cu118onlytorch220 = ["xformers (==0.0.24)"]
+cu121onlytorch220 = ["xformers (==0.0.24)"]
+cu118onlytorch230 = ["xformers (==0.0.27)"]
+cu121onlytorch230 = ["xformers (==0.0.27)"]
+cu118onlytorch240 = ["xformers (==0.0.27.post2)"]
+cu121onlytorch240 = ["xformers (==0.0.27.post2)"]
+cu118onlytorch250 = ["xformers (==0.0.28.post2)"]
+cu121onlytorch250 = ["xformers (==0.0.28.post2)"]
+cu124onlytorch250 = ["xformers (==0.0.28.post2)"]
+cu118onlytorch251 = ["xformers (==0.0.29.post1)"]
+cu121onlytorch251 = ["xformers (==0.0.29.post1)"]
+cu124onlytorch251 = ["xformers (==0.0.29.post1)"]
+cu118onlytorch260 = ["xformers (==0.0.29.post3)"]
+cu124onlytorch260 = ["xformers (==0.0.29.post3)"]
+cu126onlytorch260 = ["xformers (==0.0.29.post3)"]
+cu118onlytorch270 = ["xformers (==0.0.30)"]
+cu126onlytorch270 = ["xformers (==0.0.30)"]
+cu128onlytorch270 = ["xformers (==0.0.30)"]
+cu118onlytorch271 = ["xformers (==0.0.31.post1)"]
+cu126onlytorch271 = ["xformers (==0.0.31.post1)"]
+cu128onlytorch271 = ["xformers (==0.0.31.post1)"]
+cu118onlytorch280 = ["xformers (==0.0.32.post2)"]
+cu126onlytorch280 = ["xformers (==0.0.32.post2)"]
+cu128onlytorch280 = ["xformers (==0.0.32.post2)"]
+cu118 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu121 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu118-torch211 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu121-torch211 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu118-torch212 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu121-torch212 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu118-torch220 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu121-torch220 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu118-torch230 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu121-torch230 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu118-torch240 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu121-torch240 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu124-torch240 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu118-torch250 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu121-torch250 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu124-torch250 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu118-torch251 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu121-torch251 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu124-torch251 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu118-torch260 = ["unsloth", "bitsandbytes (>=0.45.1)", "unsloth"]
+cu124-torch260 = ["unsloth", "bitsandbytes (>=0.45.1)", "unsloth"]
+cu126-torch260 = ["unsloth", "bitsandbytes (>=0.45.1)", "unsloth"]
+cu118-torch270 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu126-torch270 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu128-torch270 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu118-torch271 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu126-torch271 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu128-torch271 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu118-torch280 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu126-torch280 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu128-torch280 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu130-torch280 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu126-torch290 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu128-torch290 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu130-torch290 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+kaggle = ["unsloth"]
+kaggle-new = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)"]
+conda = ["unsloth"]
+colab-torch211 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+flashattention = ["packaging", "ninja", "flash-attn (>=2.6.3)"]
+colab-ampere-torch211 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+colab-torch220 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+colab-ampere-torch220 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+colab-new = ["unsloth_zoo (>=2025.11.4)", "packaging", "tyro", "transformers (>=4.51.3,!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,!=4.57.0,<=4.57.2)", "datasets (>=3.4.1,<4.0.0 || >4.1.0,<4.4.0)", "sentencepiece (>=0.2.0)", "tqdm", "psutil", "wheel (>=0.42.0)", "numpy", "protobuf", "huggingface_hub (>=0.34.0)", "hf-transfer", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+colab-no-deps = ["accelerate (>=0.34.1)", "trl (>=0.18.2,!=0.19.0,<=0.23.0)", "peft (>=0.7.1)", "xformers (<0.0.27)", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "protobuf"]
+colab = ["unsloth"]
+colab-ampere = ["unsloth", "unsloth"]
+cu118-ampere = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu121-ampere = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu118-ampere-torch211 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu121-ampere-torch211 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu118-ampere-torch220 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu121-ampere-torch220 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu118-ampere-torch230 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu121-ampere-torch230 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu118-ampere-torch240 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu121-ampere-torch240 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu124-ampere-torch240 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu118-ampere-torch250 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu121-ampere-torch250 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu124-ampere-torch250 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu118-ampere-torch251 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu121-ampere-torch251 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu124-ampere-torch251 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu118-ampere-torch260 = ["unsloth", "bitsandbytes (>=0.45.1)", "unsloth", "unsloth"]
+cu124-ampere-torch260 = ["unsloth", "bitsandbytes (>=0.45.1)", "unsloth", "unsloth"]
+cu126-ampere-torch260 = ["unsloth", "bitsandbytes (>=0.45.1)", "unsloth", "unsloth"]
+cu118-ampere-torch270 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu126-ampere-torch270 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu128-ampere-torch270 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu118-ampere-torch271 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu126-ampere-torch271 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu128-ampere-torch271 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu118-ampere-torch280 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu126-ampere-torch280 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu128-ampere-torch280 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth", "unsloth"]
+cu130-ampere-torch280 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu126-ampere-torch290 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu128-ampere-torch290 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+cu130-ampere-torch290 = ["unsloth", "bitsandbytes (>=0.45.5,!=0.46.0,!=0.48.0)", "unsloth"]
+
+[[package]]
+name = "unsloth-zoo"
+version = "2025.11.4"
+description = "Utils for Unsloth"
+category = "main"
+optional = false
+python-versions = "<3.14,>=3.9"
+
+[package.dependencies]
+accelerate = ">=0.34.1"
+cut_cross_entropy = {version = "*", markers = "python_version >= \"3.10\""}
+datasets = ">=3.4.1,<4.0.0 || >4.1.0,<4.4.0"
+filelock = "*"
+hf_transfer = "*"
+huggingface_hub = ">=0.34.0"
+msgspec = "*"
+numpy = "*"
+packaging = ">=24.1"
+peft = ">=0.7.1,<0.11.0 || >0.11.0"
+pillow = "*"
+protobuf = "*"
+psutil = "*"
+regex = "*"
+sentencepiece = ">=0.2.0"
+torch = ">=2.4.0"
+torchao = ">=0.13.0"
+tqdm = "*"
+transformers = ">=4.51.3,<4.52.0 || >4.52.0,<4.52.1 || >4.52.1,<4.52.2 || >4.52.2,<4.52.3 || >4.52.3,<4.53.0 || >4.53.0,<4.54.0 || >4.54.0,<4.55.0 || >4.55.0,<4.55.1 || >4.55.1,<=4.57.2"
+triton = {version = ">=3.0.0", markers = "sys_platform in \"linux\""}
+triton-windows = {version = "*", markers = "sys_platform == \"win32\" and (platform_machine == \"AMD64\" or platform_machine == \"x86_64\")"}
+trl = ">=0.18.2,<0.19.0 || >0.19.0,<=0.24.0"
+typing_extensions = "*"
+tyro = "*"
+
+[package.extras]
+huggingface = ["packaging (>=24.1)", "tyro", "transformers (>=4.51.3,!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,<=4.57.2)", "datasets (>=3.4.1,<4.0.0 || >4.1.0,<4.4.0)", "sentencepiece (>=0.2.0)", "tqdm", "psutil", "wheel (>=0.42.0)", "numpy", "accelerate (>=0.34.1)", "trl (>=0.18.2,!=0.19.0,<=0.24.0)", "peft (>=0.7.1,!=0.11.0)", "protobuf", "huggingface_hub (>=0.34.0)", "hf-transfer", "cut-cross-entropy", "pillow", "regex", "msgspec", "typing-extensions", "filelock"]
+base = ["unsloth-zoo"]
+intelgpu = ["torch (>=2.4.0)", "triton (>=3.0.0)", "unsloth-zoo"]
+
+[[package]]
+name = "urllib3"
+version = "2.5.0"
+description = "HTTP library with thread-safe connection pooling, file post, and more."
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.extras]
+brotli = ["brotli (>=1.0.9)", "brotlicffi (>=0.8.0)"]
+h2 = ["h2 (>=4,<5)"]
+socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
+zstd = ["zstandard (>=0.18.0)"]
+
+[[package]]
+name = "xformers"
+version = "0.0.33.post1"
+description = "XFormers: A collection of composable Transformer building blocks."
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+numpy = "*"
+torch = "2.9.0"
+
+[[package]]
+name = "xxhash"
+version = "3.6.0"
+description = "Python binding for xxHash"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
+name = "yarl"
+version = "1.22.0"
+description = "Yet another URL library"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.dependencies]
+idna = ">=2.0"
+multidict = ">=4.0"
+propcache = ">=0.2.1"
+
+[[package]]
+name = "zipp"
+version = "3.23.0"
+description = "Backport of pathlib-compatible object wrapper for zip files"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[package.extras]
+test = ["pytest (>=6,<8.1.0 || >=8.2.0)", "jaraco.itertools", "jaraco.functools", "more-itertools", "big-o", "pytest-ignore-flaky", "jaraco.test"]
+doc = ["sphinx (>=3.5)", "jaraco.packaging (>=9.3)", "rst.linker (>=1.9)", "furo", "sphinx-lint", "jaraco.tidelift (>=1.4)"]
+check = ["pytest-checkdocs (>=2.4)", "pytest-ruff (>=0.2.1)"]
+cover = ["pytest-cov"]
+enabler = ["pytest-enabler (>=2.2)"]
+type = ["pytest-mypy"]
+
+[metadata]
+lock-version = "1.1"
+python-versions = "^3.10 <3.14"
+content-hash = "4d1c493534481c0bbb129d8b45aed188c9814039a4bec803c20929b0840620c4"
+
+[metadata.files]
+accelerate = []
+aiohappyeyeballs = []
+aiohttp = []
+aiosignal = []
+anyio = []
+async-timeout = []
+attrs = []
+bitsandbytes = []
+certifi = []
+charset-normalizer = []
+colorama = []
+cut-cross-entropy = []
+datasets = []
+diffusers = []
+dill = []
+docstring-parser = []
+exceptiongroup = []
+filelock = []
+frozenlist = []
+fsspec = []
+h11 = []
+hf-transfer = []
+hf-xet = []
+httpcore = []
+httpx = []
+huggingface-hub = []
+idna = []
+importlib-metadata = []
+jinja2 = []
+markdown-it-py = []
+markupsafe = []
+mdurl = []
+mpmath = []
+msgspec = []
+multidict = []
+multiprocess = []
+networkx = []
+numpy = []
+nvidia-cublas-cu12 = []
+nvidia-cuda-cupti-cu12 = []
+nvidia-cuda-nvrtc-cu12 = []
+nvidia-cuda-runtime-cu12 = []
+nvidia-cudnn-cu12 = []
+nvidia-cufft-cu12 = []
+nvidia-cufile-cu12 = []
+nvidia-curand-cu12 = []
+nvidia-cusolver-cu12 = []
+nvidia-cusparse-cu12 = []
+nvidia-cusparselt-cu12 = []
+nvidia-nccl-cu12 = []
+nvidia-nvjitlink-cu12 = []
+nvidia-nvshmem-cu12 = []
+nvidia-nvtx-cu12 = []
+packaging = []
+pandas = []
+peft = []
+pillow = []
+propcache = []
+protobuf = []
+psutil = []
+pyarrow = []
+pygments = []
+python-dateutil = []
+pytz = []
+pyyaml = []
+regex = []
+requests = []
+rich = []
+safetensors = []
+sentencepiece = []
+shtab = []
+six = []
+sniffio = []
+sympy = []
+tokenizers = []
+torch = []
+torchao = []
+torchvision = []
+tqdm = []
+transformers = []
+triton = []
+triton-windows = []
+trl = []
+typeguard = []
+typing-extensions = []
+tyro = []
+tzdata = []
+unsloth = []
+unsloth-zoo = []
+urllib3 = []
+xformers = []
+xxhash = []
+yarl = []
+zipp = []

@@ -98,7 +98,7 @@ class Benchmark:
             # Inference on batch
             outputs = self.model.generate(
                 **inputs,
-                max_new_tokens=1024,
+                max_new_tokens=128,
                 do_sample=False,
                 temperature=1.0,
                 use_cache=True
@@ -117,7 +117,6 @@ class Benchmark:
 
 if __name__ == "__main__":
     model_name = "mistral"  # Use llama, mistral or gemma
-    input_path = "/content/drive/MyDrive/WPI/CS_555/Project/data/input/test_data.json"
     batch_size = 8
     s_id = 0
     e_id = 10

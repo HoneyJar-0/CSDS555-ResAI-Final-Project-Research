@@ -208,3 +208,4 @@ __marimo__/
 
 # Our stuff
 data/input/dataset.csv
+data/input/dataset/*

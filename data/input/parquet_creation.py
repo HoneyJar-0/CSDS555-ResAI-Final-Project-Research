@@ -12,9 +12,8 @@ df_scen = pd.read_csv('./data/input/scenarios.csv')
 scenarios = df_scen.set_index("id")["scenario"].to_dict()
 
 def create_dataset():
-    if not os.path.isfile('./data/input/identities.txt'):
-        umbrella, gender, so, ro = identity_script.get_queer_attributes()
-        identity_script.save_identities_to_file(identity_script.attribute_pairing(umbrella, gender, so, ro))
+    if not os.path.isfile('./data/input/identities.csv'):
+        identity_script.identity_pipeline()
     '''
     with open('./data/input/identities.txt') as f:
         identity_list = [x.strip() for x in f]
@@ -122,7 +121,6 @@ Use as many adjectives as possible when stating your reactions. Answer in no mor
         {"role": "system", "content": sys_message},
         {"role": "user",   "content": user_message}
     ]
-
 
 if __name__ == "__main__":
     create_dataset()

@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import time
+import json
 
 class BatchWriter:
     def __init__(self, output_dir, model_name, worker_name):
@@ -44,15 +45,21 @@ class BatchWriter:
         self.buffer = []
         self.file_counter += 1
 
-
-if __name__ == '__main__':
+def output_pipeline(config):
     writer = BatchWriter(
         output_dir="./data/output/dataset", 
-        model_name="gpt-4",
-        worker_name="Daniel"
+        model_name=config["model"],
+        worker_name=config["user"]
     )
+    for i in range(config["start"],config["end"]):
+        writer.add(uuid=i, response=f"Response from {config["model"]} for item {i}")
+        writer.flush()
+        with open('../notice.txt','w') as fp:
+            fp.write(i)
 
-    for i in range(10000):
-        writer.add(uuid=i, response=f"Response from GPT-4 for item {i}")
+if __name__ == '__main__':
+    config = {}
+    with open('../config.json','r') as fp:
+        config = json.load(fp)
+    output_pipeline(config)
 
-    writer.flush()

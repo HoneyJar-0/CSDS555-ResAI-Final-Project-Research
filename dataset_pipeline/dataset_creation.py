@@ -15,7 +15,7 @@ df_scen = pd.read_csv(f'{experiment_config.input_dir}/scenarios.csv')
 scenarios = df_scen.set_index("id")["scenario"].to_dict()
 
 def create_dataset():
-    if not os.path.isfile(f'{experiment_config.input_dir}/identities.txt'):
+    if not os.path.isfile('./data/input/identities.csv'):
         umbrella, gender, so, ro = identity_script.get_queer_attributes()
         identity_script.save_identities_to_file(identity_script.attribute_pairing(umbrella, gender, so, ro))
 
@@ -98,11 +98,18 @@ def split_parquet(in_path, out_dir):
         out_path = os.path.join(out_dir, f"part_{file_idx}.parquet")
         pq.write_table(pa.concat_tables(buffered_tables), out_path)
 
-
-if __name__ == "__main__":
+def pipeline():
     create_dataset()
     split_parquet(f"{experiment_config.input_dir}/dataset.parquet", f"{experiment_config.input_dir}/dataset")
 
     # Remove big dataset
+<<<<<<< HEAD
     if os.path.exists(f"{experiment_config.input_dir}/dataset.parquet"):
         os.remove(f"{experiment_config.input_dir}/dataset.parquet")
+=======
+    if os.path.exists("./data/input/dataset.parquet"):
+        os.remove("./data/input/dataset.parquet")
+
+if __name__ == "__main__":
+    pipeline()
+>>>>>>> 4931326 (modified main.py to adhere to new system)

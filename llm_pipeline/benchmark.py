@@ -16,7 +16,7 @@ class Benchmark:
 
         data = PromptDataLoader(start_uuid=start_uuid, end_uuid=end_uuid)
         self.loader = data.load_parquet_to_df(batch_size=batch_size)
-        self.writer = BatchWriter(output_dir, self.model_name.split("/")[-1], worker_name)
+        self.writer = BatchWriter(model_name=self.model_name.split("/")[-1], worker_name=worker_name, output_dir=output_dir, buffer_size=(batch_size*2))
 
     def get_model_name(self, model_id: str) -> str:
         model_dict = {

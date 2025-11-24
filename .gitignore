@@ -158,6 +158,7 @@ __marimo__/
 
 # Project Files
 data/input/dataset/*
+data/output/*
 *unsloth_compiled_cache/*
 .run/*
 *.parquet

@@ -6,14 +6,20 @@ from tqdm import tqdm
 from unsloth import FastLanguageModel
 
 from data_loader import PromptDataLoader
+from data_saver import BatchWriter
 
 class Benchmark:
-    def __init__(self, model_id, batch_size, start_uuid=0, end_uuid=50):
+    def __init__(
+            self, model_id, worker_name,
+            batch_size=50, start_uuid=0, end_uuid=50,
+            output_dir="./data/output"
+    ):
         self.model_name = self.get_model_name(model_id)
         self.model, self.tokenizer = self.load_model()
         self.batch_size = batch_size
         data = PromptDataLoader(start_uuid=start_uuid, end_uuid=end_uuid)
         self.loader = data.load_parquet_to_df(batch_size=batch_size)
+        self.writer = BatchWriter(self.model_name.split("/")[-1], worker_name, output_dir, buffer_size=(batch_size*2))
 
     def get_model_name(self, model_id: str) -> str:
         model_dict = {
@@ -84,7 +90,6 @@ class Benchmark:
         """
         # Load the model for inferencing
         FastLanguageModel.for_inference(self.model)  # Enable native 2x faster inference
-        all_outputs = []
 
         for batch in tqdm(self.loader, desc="Processing Batches"):
             # Create prompts for inputs for batch
@@ -98,7 +103,7 @@ class Benchmark:
             # Inference on batch
             outputs = self.model.generate(
                 **inputs,
-                max_new_tokens=128,
+                max_new_tokens=512,
                 do_sample=False,
                 temperature=1.0,
                 use_cache=True
@@ -110,19 +115,24 @@ class Benchmark:
             processed_batch = self.extract_responses(decoded)
 
             # Store aligned with original IDs
-            for i, out in zip(batch[0], processed_batch):
-                all_outputs.append((i, out))  # TODO: Instead of list append store to DB or something
+            for id, out in zip(batch[0], processed_batch):
+                self.writer.add(id, out)
 
-        return all_outputs
+        # Final flush to save remaining data
+        out_path = self.writer.flush()
+
+        return out_path
 
 if __name__ == "__main__":
     model_name = "mistral"  # Use llama, mistral or gemma
-    batch_size = 8
+    batch_size = 12
     s_id = 0
     e_id = 10
 
-    runner = Benchmark(model_id=model_name, batch_size=batch_size, start_uuid=s_id, end_uuid=e_id)  # Model downloading takes 10-ish minutes for first time
+    runner = Benchmark(
+        model_id=model_name, worker_name="Samar", batch_size=batch_size,
+        start_uuid=s_id, end_uuid=e_id,
+        output_dir="/workspaces/Project/CSDS555-ResAI-Final-Project-Research/data/output"
+        
+    )  # Model downloading takes 10-ish minutes for first time
     results = runner.run()
-
-    for r in results:
-        print(r)

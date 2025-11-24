@@ -1,0 +1,9 @@
+# Data Directories
+data_dir: ./data
+log_dir: ./data/logs
+input_dir: ./data/input
+output_dir: ./data/output
+models_dir: ./data/models
+
+# Base Logger
+log_format: "%Y-%m-%d_%H%M%S"

@@ -105,7 +105,7 @@ class Benchmark:
                 **inputs,
                 max_new_tokens=512,
                 do_sample=False,
-                temperature=1.0,
+                temperature=0.0,
                 use_cache=True
             )
 
@@ -122,6 +122,23 @@ class Benchmark:
         out_path = self.writer.flush()
 
         return out_path
+
+def pipeline(config):
+    runner = Benchmark(model_id=config["model"], 
+                       batch_size=config["batch_size"], 
+                       start_uuid=config["start"], 
+                       end_uuid=config["end"])  # Model downloading takes 10-ish minutes for first time
+    results = runner.run()
+
+def pipeline(config):
+    runner = Benchmark(model_id=config["model"], 
+                       batch_size=config["batch_size"], 
+                       start_uuid=config["start"], 
+                       end_uuid=config["end"])  # Model downloading takes 10-ish minutes for first time
+    results = runner.run()
+
+    for r in results:
+        print(r)
 
 if __name__ == "__main__":
     model_name = "mistral"  # Use llama, mistral or gemma

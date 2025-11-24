@@ -6,20 +6,17 @@ from tqdm import tqdm
 from unsloth import FastLanguageModel
 
 from data_loader import PromptDataLoader
-from data_saver import BatchWriter
+from parquet_handler import BatchWriter
 
 class Benchmark:
-    def __init__(
-            self, model_id, worker_name,
-            batch_size=50, start_uuid=0, end_uuid=50,
-            output_dir="./data/output"
-    ):
+    def __init__(self, model_id, worker_name, batch_size=50, start_uuid=0, end_uuid=50, output_dir="./data/output"):
         self.model_name = self.get_model_name(model_id)
         self.model, self.tokenizer = self.load_model()
         self.batch_size = batch_size
+
         data = PromptDataLoader(start_uuid=start_uuid, end_uuid=end_uuid)
         self.loader = data.load_parquet_to_df(batch_size=batch_size)
-        self.writer = BatchWriter(self.model_name.split("/")[-1], worker_name, output_dir, buffer_size=(batch_size*2))
+        self.writer = BatchWriter(output_dir, self.model_name.split("/")[-1], worker_name)
 
     def get_model_name(self, model_id: str) -> str:
         model_dict = {
@@ -132,7 +129,7 @@ if __name__ == "__main__":
     runner = Benchmark(
         model_id=model_name, worker_name="Samar", batch_size=batch_size,
         start_uuid=s_id, end_uuid=e_id,
-        output_dir="/workspaces/Project/CSDS555-ResAI-Final-Project-Research/data/output"
+        output_dir="data/output"
         
     )  # Model downloading takes 10-ish minutes for first time
     results = runner.run()

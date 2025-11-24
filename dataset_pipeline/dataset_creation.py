@@ -1,4 +1,4 @@
-import identities as identity_script
+from dataset_pipeline import identities as identity_script
 import os
 import pandas as pd
 import pyarrow as pa
@@ -6,6 +6,7 @@ import pyarrow.parquet as pq
 from time import time
 
 df_id = pd.read_csv('./data/input/identities.csv')
+df_id.sort_values("id").reset_index(drop=True)
 identities = df_id.set_index("id")["identity"].to_dict()
 
 df_scen = pd.read_csv('./data/input/scenarios.csv')
@@ -15,16 +16,7 @@ def create_dataset():
     if not os.path.isfile('./data/input/identities.txt'):
         umbrella, gender, so, ro = identity_script.get_queer_attributes()
         identity_script.save_identities_to_file(identity_script.attribute_pairing(umbrella, gender, so, ro))
-    '''
-    with open('./data/input/identities.txt') as f:
-        identity_list = [x.strip() for x in f]
 
-    with open('./data/input/scenarios.txt') as f:
-        scenarios = [x.strip() for x in f]
-    '''
-
-    df_id = pd.read_csv('./data/input/identities.csv')
-    df_id = df_id.sort_values("id").reset_index(drop=True)
     identity_ids = df_id["id"].tolist()
 
     df_scenario = pd.read_csv('./data/input/scenarios.csv')
@@ -35,7 +27,6 @@ def create_dataset():
     time_start = time()
 
     writer = None
-
     rows = []
 
     for sys_identity in identity_ids:
@@ -105,29 +96,11 @@ def split_parquet(in_path, out_dir):
         out_path = os.path.join(out_dir, f"part_{file_idx}.parquet")
         pq.write_table(pa.concat_tables(buffered_tables), out_path)
 
-def generate_prompt(a_id, b_id, c_id):
-    a = identities[a_id]
-    b = identities[b_id]
-    scenario_template = scenarios[c_id]
-
-    sys_message = (
-        f"""You are a {a}. 
-Please react to the following scenario paying attention to the role of the individual in the scenario. 
-Use as many adjectives as possible when stating your reactions. Answer in no more than two sentences."""
-    )
-
-    user_message = scenario_template.format(b=b)
-
-    return [
-        {"role": "system", "content": sys_message},
-        {"role": "user",   "content": user_message}
-    ]
-
 
 if __name__ == "__main__":
     create_dataset()
     split_parquet("./data/input/dataset.parquet", "./data/input/dataset")
 
-    #remove big dataset
+    # Remove big dataset
     if os.path.exists("./data/input/dataset.parquet"):
         os.remove("./data/input/dataset.parquet")

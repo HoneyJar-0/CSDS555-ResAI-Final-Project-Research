@@ -9,14 +9,14 @@ from data_loader import PromptDataLoader
 from parquet_handler import BatchWriter
 
 class Benchmark:
-    def __init__(self, model_id, worker_name, batch_size=50, start_uuid=0, end_uuid=50, output_dir="./data/output"):
+    def __init__(self, model_id, worker_name, batch_size=50, buffer_size=100, start_uuid=0, end_uuid=50, output_dir="./data/output"):
         self.model_name = self.get_model_name(model_id)
         self.model, self.tokenizer = self.load_model()
         self.batch_size = batch_size
 
         data = PromptDataLoader(start_uuid=start_uuid, end_uuid=end_uuid)
         self.loader = data.load_parquet_to_df(batch_size=batch_size)
-        self.writer = BatchWriter(model_name=self.model_name.split("/")[-1], worker_name=worker_name, output_dir=output_dir, buffer_size=(batch_size*2))
+        self.writer = BatchWriter(model_name=self.model_name.split("/")[-1], worker_name=worker_name, output_dir=output_dir, buffer_size=buffer_size)
 
     def get_model_name(self, model_id: str) -> str:
         model_dict = {
@@ -103,7 +103,6 @@ class Benchmark:
                 max_new_tokens=512,
                 do_sample=False,
                 temperature=0.0,
-                temperature=0.0,
                 use_cache=True
             )
 
@@ -122,21 +121,14 @@ class Benchmark:
         return out_path
 
 def pipeline(config):
-    runner = Benchmark(model_id=config["model"], 
+    runner = Benchmark(model_id=config["model"],
+                       worker_name=config["user"],
                        batch_size=config["batch_size"], 
+                       buffer_size=config["buffer_size"],
                        start_uuid=config["start"], 
                        end_uuid=config["end"])  # Model downloading takes 10-ish minutes for first time
     results = runner.run()
-
-def pipeline(config):
-    runner = Benchmark(model_id=config["model"], 
-                       batch_size=config["batch_size"], 
-                       start_uuid=config["start"], 
-                       end_uuid=config["end"])  # Model downloading takes 10-ish minutes for first time
-    results = runner.run()
-
-    for r in results:
-        print(r)
+    print(results)
 
 if __name__ == "__main__":
     model_name = "mistral"  # Use llama, mistral or gemma

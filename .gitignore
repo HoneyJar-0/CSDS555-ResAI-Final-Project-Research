@@ -209,4 +209,5 @@ __marimo__/
 # Our stuff
 data/input/dataset.csv
 data/input/dataset/*
-pipelines/benchmarking_pipeline/scripts/unsloth_compiled_cache/*
+pipelines/benchmarking_pipeline/scripts/unsloth_compiled_cache
+*.parquet

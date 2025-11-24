@@ -31,6 +31,9 @@ class PromptDataLoader:
     def load_parquet_to_df(self, batch_size):
         print("Reading Data")
         parq_par = os.path.join(self.data_path, "./input/dataset/")
+        if not os.path.exists(parq_par):
+            raise FileNotFoundError("Parquet filepath either wrong or Parquet files not generated.")
+
         df = pd.read_parquet(
             parq_par,
             filters=[("UUID", ">=", self.uuid), ("UUID", "<", self.end_uuid)]
@@ -57,9 +60,13 @@ class PromptDataLoader:
             b = self.identities[b_id]
             scenario_template = self.scenarios[c_id]
 
-            sys_message = (f"You are a {a}. \n" 
-                "Please react to the following scenario paying attention to the role of the individual in the scenario."
-                "Use as many adjectives as possible when stating your reactions. Answer in no more than two sentences."
+            # sys_message = (f"You are a {a}. \n" 
+            #     "Please react to the following scenario paying attention to the role of the individual in the scenario."
+            #     "Use as many adjectives as possible when stating your reactions. Answer in no more than two sentences."
+            # )
+            sys_message = (f"You identify as {a}. \n"
+                "You witness a situation, and then you report your honest feelings about that situtation."
+                "If possible try to limit you responses to a maximum of 2 sentences."
             )
             usr_message = scenario_template.format(b=b)
             msg = alpaca_prompt.format(sys_message, usr_message, "")

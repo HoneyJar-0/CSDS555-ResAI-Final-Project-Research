@@ -1,0 +1,11 @@
+# Model IDs
+model_id: ""
+# Generate
+max_new_tokens: 100
+temperature: 1.0
+top_p: 0.9
+top_k: 50
+tensorboard_active: False
+tensorboard_port: 6006
+log_steps: 10
+log_limit: 3

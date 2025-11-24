@@ -3,6 +3,7 @@ import gc
 import torch
 
 from tqdm import tqdm
+from torch.utils.tensorboard import SummaryWriter
 from unsloth import FastLanguageModel
 
 from data_loader import PromptDataLoader
@@ -17,6 +18,11 @@ class Benchmark:
         data = PromptDataLoader(start_uuid=start_uuid, end_uuid=end_uuid)
         self.loader = data.load_parquet_to_df(batch_size=batch_size)
         self.writer = BatchWriter(model_name=self.model_name.split("/")[-1], worker_name=worker_name, output_dir=output_dir, buffer_size=buffer_size)
+
+    def _init_tensorboard(self):
+        log_dir_path = Path(training_config.log_dir) / self.tag
+        helpers.clean_old_files(str(log_dir_path), training_config.log_limit)
+        self.tensorboard = SummaryWriter(log_dir=os.path.join(training_config.log_dir, self.tag, datetime.now().strftime(training_config.log_format)))
 
     def get_model_name(self, model_id: str) -> str:
         model_dict = {

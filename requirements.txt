@@ -1,3 +1,6 @@
+pyarrow
+unsloth
+data_loader
 accelerate==1.11.0
 bitsandbytes==0.48.2
 ipykernel==7.1.0

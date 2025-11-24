@@ -2,18 +2,19 @@ import os
 import pandas as pd
 from torch.utils.data import Dataset, DataLoader
 
+# Dataset Adapter for Pandas DataFrame
 class DFDataset(Dataset):
     def __init__(self, df):
-        self.df = df.values  # keep values exactly as-is
+        self.df = df.values
 
     def __len__(self):
         return len(self.df)
 
     def __getitem__(self, idx):
-        return self.df[idx]   # returns raw row as numpy array
+        return self.df[idx]
 
 class PromptDataLoader:
-    def __init__(self, start_uuid, end_uuid, path="/workspaces/Project/CSDS555-ResAI-Final-Project-Research/data") -> None:
+    def __init__(self, start_uuid, end_uuid, path="./data/input") -> None:
         """
         Path to data folder
         start_uuid starts from 0
@@ -22,15 +23,15 @@ class PromptDataLoader:
         self.uuid = start_uuid
         self.end_uuid = end_uuid
 
-        df_id = pd.read_csv(f'{path}/input/identities.csv')
+        df_id = pd.read_csv(f'{path}/identities.csv')
         self.identities = df_id.set_index("id")["identity"].to_dict()
 
-        df_scen = pd.read_csv(f'{path}/input/scenarios.csv')
+        df_scen = pd.read_csv(f'{path}/scenarios.csv')
         self.scenarios = df_scen.set_index("id")["scenario"].to_dict()
 
     def load_parquet_to_df(self, batch_size):
         print("Reading Data")
-        parq_par = os.path.join(self.data_path, "./input/dataset/")
+        parq_par = os.path.join(self.data_path, "dataset")
         if not os.path.exists(parq_par):
             raise FileNotFoundError("Parquet filepath either wrong or Parquet files not generated.")
 
@@ -51,8 +52,6 @@ class PromptDataLoader:
         )
         data = []
         uuid_list = []
-        # print(f"Shape: {len(batch)}")
-        # print(f"Batch: {batch}")
         for item in batch:
             u_id, a_id, b_id, c_id = item
 

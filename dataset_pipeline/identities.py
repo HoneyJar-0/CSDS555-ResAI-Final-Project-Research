@@ -61,7 +61,7 @@ def attribute_pairing(umbrella, gender, so, ro):
     return permutations
 
 def save_identities_to_file(identities):
-    with open("identities.csv", 'w') as fp:
+    with open("./data/input/identities.csv", 'w') as fp:
         fp.write("id,identity\n")
         for i, ident in enumerate(identities):
             fp.write(f"{i},{ident}\n")

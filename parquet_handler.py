@@ -1,26 +1,27 @@
 import pandas as pd
 import os
 import time
+import pyarrow.dataset as ds
 
 class BatchWriter:
     def __init__(self, output_dir, model_name, worker_name):
         self.output_dir = os.path.join(output_dir, f"model={model_name}", f"user={worker_name}")
-        
+
         self.buffer = []
         self.file_counter = 0
         self.model_name = model_name
-        
+
         os.makedirs(self.output_dir, exist_ok=True)
 
     def add(self, uuid, response, **kwargs):
         self.buffer.append({
-            "UUID": uuid, 
-            "response": response, 
-            "model": self.model_name, 
+            "UUID": uuid,
+            "response": response,
+            "model": self.model_name,
             **kwargs
         })
-        
-        if len(self.buffer) % 100 == 0: 
+
+        if len(self.buffer) % 100 == 0:
             self._check_size()
 
     def _check_size(self):
@@ -44,15 +45,20 @@ class BatchWriter:
         self.buffer = []
         self.file_counter += 1
 
+class BatchReader:
+    def __init__(self, root_dir, filters=None, batch_size=-1):
+        self.dataset = ds.dataset(root_dir, format="parquet")
+        self.scanner = self.dataset.scanner(filter=filters, batch_size=batch_size, use_threads=True)
+        self.iterator = iter(self.scanner)
 
-if __name__ == '__main__':
-    writer = BatchWriter(
-        output_dir="./data/output/dataset", 
-        model_name="gpt-4",
-        worker_name="Daniel"
-    )
+    def __iter__(self):
+        return self
 
-    for i in range(10000):
-        writer.add(uuid=i, response=f"Response from GPT-4 for item {i}")
+    def __next__(self):
+        batch = next(self.iterator)
+        return batch.to_pandas()
 
-    writer.flush()
+    # Iteratively maps over all files without simultaneous loading
+    def map(self, column, function):
+        for batch in self.iterator:
+            batch.to_pandas()[column].map(function)

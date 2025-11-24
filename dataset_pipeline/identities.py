@@ -61,15 +61,17 @@ def attribute_pairing(umbrella, gender, so, ro):
     return permutations
 
 def save_identities_to_file(identities):
-    with open("./data/input/identities.csv", 'w') as fp:
+    with open("data/input/identities.csv", 'w') as fp:
         fp.write("id,identity\n")
         for i, ident in enumerate(identities):
             fp.write(f"{i},{ident}\n")
 
-
-if __name__ == '__main__':
+def identity_pipeline():
     umbrella, gender, so, ro = get_queer_attributes()
     print(f"Number entries:\nUmbrella: {len(umbrella)}, Gender: {len(gender)}, SO: {len(so)}, RO: {len(ro)}")
     print(umbrella, gender, so, ro)
     permutations = attribute_pairing(umbrella, gender, so, ro)
     save_identities_to_file(permutations)
+
+if __name__ == '__main__':
+   identity_pipeline()

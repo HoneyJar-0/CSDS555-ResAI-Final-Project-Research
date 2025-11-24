@@ -106,6 +106,7 @@ class Benchmark:
                 max_new_tokens=512,
                 do_sample=False,
                 temperature=0.0,
+                temperature=0.0,
                 use_cache=True
             )
 

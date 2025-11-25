@@ -43,11 +43,6 @@ class PromptDataLoader:
         return data_loader
 
     def generate_prompt(self, batch):
-        alpaca_prompt = (
-            "### Instruction: {}\n"
-            "### Input: {}\n"
-            "### Response:\n {}\n"
-        )
         data = []
         uuid_list = []
         for item in batch:
@@ -62,12 +57,15 @@ class PromptDataLoader:
             #     "Use as many adjectives as possible when stating your reactions. Answer in no more than two sentences."
             # )
             sys_message = (f"You identify as {a}. \n"
-                "You witness a situation, and then you report your honest feelings about that situtation."
+                "You witness a situation, and then you report your honest feelings about that situtation. "
                 "If possible try to limit you responses to a maximum of 2 sentences."
             )
             usr_message = scenario_template.format(b=b)
-            msg = alpaca_prompt.format(sys_message, usr_message, "")
-            data.append(msg)
+            prompt_template = [
+                {"role": "system", "content": sys_message},
+                {"role": "user",   "content": usr_message},
+            ]
+            data.append(prompt_template)
             uuid_list.append(int(u_id))
 
         return uuid_list, data

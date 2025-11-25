@@ -105,12 +105,10 @@ class Benchmark:
             
             # Post process batch
             cleaned = ""
-            if "mistral" in self.model_name:
+            if "mistral" in self.model_name.lower():
                 cleaned = [r.replace("[INST]", "").replace("<s>", "").replace("</s>", "").strip().split("[/INST]")[-1] for r in decoded]
-            elif "llama" in self.model_name:
-                match = re.search(r"<\|start_header_id\|>assistant<\|end_header_id\|>\n\n(.*?)<\|eot_id\|>", decoded, re.DOTALL)
-                if match:
-                    cleaned = match.group(1).strip()
+            elif "llama" in self.model_name.lower():
+                cleaned = [r.split("<|start_header_id|>assistant<|end_header_id|>")[1].split("<|eot_id|>")[0].strip() for r in decoded]
             
             if cleaned == "":
                 raise ValueError(f"Empty output. Check Decoded:\n{decoded}")

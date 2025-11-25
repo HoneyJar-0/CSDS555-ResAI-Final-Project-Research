@@ -20,11 +20,11 @@ requeue_handler() {
 trap 'requeue_handler' SIGTERM
 
 mkdir console_logs/
-module load python/3.14
-module load cuda/13.0 
+module load python/3.12.10
+module load cuda/12.9.0 
 python3 -m venv ResAIProject
 source ResAIProject/bin/activate
-pip install -r requirements.txt 
+pip3 install -r requirements.txt 
 python3 main.py &
 wait
 mv *.out console_logs/

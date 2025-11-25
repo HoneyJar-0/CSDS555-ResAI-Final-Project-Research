@@ -163,3 +163,5 @@ data/output/*
 data/logs/*
 *unsloth_compiled_cache
 *.parquet
+ResAIProject/
+console_logs/

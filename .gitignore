@@ -134,6 +134,7 @@ cython_debug/
 
 # PyCharm
 .idea/
+.run/
 
 # Abstra
 .abstra/
@@ -159,6 +160,6 @@ __marimo__/
 # Project Files
 data/input/dataset/*
 data/output/*
+data/logs/*
 *unsloth_compiled_cache
-.run/*
 *.parquet

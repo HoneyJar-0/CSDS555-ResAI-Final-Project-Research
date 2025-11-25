@@ -1,5 +1,9 @@
+import os
 import re
 import gc
+from datetime import datetime
+
+import psutil
 import torch
 
 from tqdm import tqdm
@@ -9,20 +13,21 @@ from unsloth import FastLanguageModel
 from data_loader import PromptDataLoader
 from parquet_handler import BatchWriter
 
+from configs import experiment_config
+
+process = psutil.Process(os.getpid())
+
 class Benchmark:
-    def __init__(self, model_id, worker_name, batch_size=50, buffer_size=100, start_uuid=0, end_uuid=50, output_dir="./data/output"):
-        self.model_name = self.get_model_name(model_id)
+    def __init__(self, start_uuid=0, end_uuid=50):
+        self.model_name = self.get_model_name(experiment_config.model_id)
         self.model, self.tokenizer = self.load_model()
-        self.batch_size = batch_size
 
         data = PromptDataLoader(start_uuid=start_uuid, end_uuid=end_uuid)
-        self.loader = data.load_parquet_to_df(batch_size=batch_size)
-        self.writer = BatchWriter(model_name=self.model_name.split("/")[-1], worker_name=worker_name, output_dir=output_dir, buffer_size=buffer_size)
+        self.loader = data.load_parquet_to_df(batch_size=experiment_config.batch_size)
+        self.writer = BatchWriter()
 
-    def _init_tensorboard(self):
-        log_dir_path = Path(training_config.log_dir) / self.tag
-        helpers.clean_old_files(str(log_dir_path), training_config.log_limit)
-        self.tensorboard = SummaryWriter(log_dir=os.path.join(training_config.log_dir, self.tag, datetime.now().strftime(training_config.log_format)))
+        if experiment_config.tensorboard_active:
+            self.tensorboard = SummaryWriter(log_dir=os.path.join(experiment_config.log_dir, datetime.now().strftime(experiment_config.log_format)))
 
     def get_model_name(self, model_id: str) -> str:
         model_dict = {
@@ -41,20 +46,16 @@ class Benchmark:
         torch.cuda.empty_cache()
         torch.cuda.ipc_collect()
 
-        max_seq_length = 2048  # Choose any! We auto support RoPE Scaling internally!
-        dtype = None  # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
-        load_in_4bit = True  # Use 4bit quantization to reduce memory usage. Can be False.
-
         model, tokenizer = FastLanguageModel.from_pretrained(
             model_name = self.model_name,
-            max_seq_length = max_seq_length,
-            dtype = dtype,
-            load_in_4bit = load_in_4bit,
+            max_seq_length = experiment_config.max_seq_length,
+            dtype = experiment_config.model_dtype,
+            load_in_4bit = experiment_config.load_in_4bit,
         )
 
-        tokenizer.padding_side = "left"
+        tokenizer.padding_side = experiment_config.padding_side
         tokenizer.pad_token = tokenizer.eos_token
-        tokenizer.truncation_side = "left"
+        tokenizer.truncation_side = experiment_config.padding_side
 
         return model, tokenizer
 
@@ -94,7 +95,7 @@ class Benchmark:
         # Load the model for inferencing
         FastLanguageModel.for_inference(self.model)  # Enable native 2x faster inference
 
-        for batch in tqdm(self.loader, desc="Processing Batches"):
+        for i,batch in tqdm(enumerate(self.loader), total=len(self.loader), desc="Processing Batches"):
             # Create prompts for inputs for batch
             inputs = self.tokenizer(
                 batch[1],
@@ -106,9 +107,9 @@ class Benchmark:
             # Inference on batch
             outputs = self.model.generate(
                 **inputs,
-                max_new_tokens=512,
+                max_new_tokens=experiment_config.max_new_tokens,
                 do_sample=False,
-                temperature=0.0,
+                temperature=experiment_config.temperature,
                 use_cache=True
             )
 
@@ -121,31 +122,25 @@ class Benchmark:
             for id, out in zip(batch[0], processed_batch):
                 self.writer.add(id, out)
 
+            if experiment_config.tensorboard_active and i%experiment_config.log_interval == 0:
+                self.tensorboard.add_scalar("Progress/Percentage", i/len(self.loader)*100, i)
+                self.tensorboard.add_scalar("Current UUID", batch[0][0], i)
+                self.tensorboard.add_scalar("GPU VRAM Allocated (GB)", torch.cuda.memory_allocated(0) / 1e9, i)
+                self.tensorboard.add_scalar("CPU RAM Allocated (GB)", process.memory_info().rss / 1e9, i)
+
         # Final flush to save remaining data
         out_path = self.writer.flush()
 
         return out_path
 
 def pipeline(config):
-    runner = Benchmark(model_id=config["model"],
-                       worker_name=config["user"],
-                       batch_size=config["batch_size"], 
-                       buffer_size=config["buffer_size"],
-                       start_uuid=config["start"], 
-                       end_uuid=config["end"])  # Model downloading takes 10-ish minutes for first time
+    runner = Benchmark(start_uuid=config["start"], end_uuid=config["end"])
     results = runner.run()
     print(results)
 
 if __name__ == "__main__":
-    model_name = "mistral"  # Use llama, mistral or gemma
-    batch_size = 12
     s_id = 0
     e_id = 10
 
-    runner = Benchmark(
-        model_id=model_name, worker_name="Samar", batch_size=batch_size,
-        start_uuid=s_id, end_uuid=e_id,
-        output_dir="data/output"
-        
-    )  # Model downloading takes 10-ish minutes for first time
+    runner = Benchmark(start_uuid=s_id, end_uuid=e_id)
     results = runner.run()

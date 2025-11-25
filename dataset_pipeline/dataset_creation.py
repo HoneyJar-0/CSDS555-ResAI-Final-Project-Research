@@ -5,21 +5,23 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from time import time
 
-df_id = pd.read_csv('./data/input/identities.csv')
+from configs import experiment_config
+
+df_id = pd.read_csv(f'{experiment_config.input_dir}/identities.csv')
 df_id.sort_values("id").reset_index(drop=True)
 identities = df_id.set_index("id")["identity"].to_dict()
 
-df_scen = pd.read_csv('./data/input/scenarios.csv')
+df_scen = pd.read_csv(f'{experiment_config.input_dir}/scenarios.csv')
 scenarios = df_scen.set_index("id")["scenario"].to_dict()
 
 def create_dataset():
-    if not os.path.isfile('./data/input/identities.txt'):
+    if not os.path.isfile(f'{experiment_config.input_dir}/identities.txt'):
         umbrella, gender, so, ro = identity_script.get_queer_attributes()
         identity_script.save_identities_to_file(identity_script.attribute_pairing(umbrella, gender, so, ro))
 
     identity_ids = df_id["id"].tolist()
 
-    df_scenario = pd.read_csv('./data/input/scenarios.csv')
+    df_scenario = pd.read_csv(f'{experiment_config.input_dir}/scenarios.csv')
     df_scenario.sort_values("id").reset_index(drop=True)
     scenario_ids = df_scenario["id"].tolist()
 
@@ -44,7 +46,7 @@ def create_dataset():
                     table = pa.Table.from_pandas(df)
 
                     if writer is None:
-                        writer = pq.ParquetWriter("./data/input/dataset.parquet", table.schema)
+                        writer = pq.ParquetWriter(f"{experiment_config.input_dir}/dataset.parquet", table.schema)
                     writer.write_table(table)
 
                     rows = []
@@ -60,7 +62,7 @@ def create_dataset():
         df = pd.DataFrame(rows)
         table = pa.Table.from_pandas(df)
         if writer is None:
-            writer = pq.ParquetWriter("./data/input/dataset.parquet", table.schema)
+            writer = pq.ParquetWriter(f"{experiment_config.input_dir}/dataset.parquet", table.schema)
         writer.write_table(table)
 
     if writer:
@@ -99,8 +101,8 @@ def split_parquet(in_path, out_dir):
 
 if __name__ == "__main__":
     create_dataset()
-    split_parquet("./data/input/dataset.parquet", "./data/input/dataset")
+    split_parquet(f"{experiment_config.input_dir}/dataset.parquet", f"{experiment_config.input_dir}/dataset")
 
     # Remove big dataset
-    if os.path.exists("./data/input/dataset.parquet"):
-        os.remove("./data/input/dataset.parquet")
+    if os.path.exists(f"{experiment_config.input_dir}/dataset.parquet"):
+        os.remove(f"{experiment_config.input_dir}/dataset.parquet")

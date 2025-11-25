@@ -3,9 +3,9 @@ import os
 from dataclasses import fields
 from pathlib import Path
 
-from .configurations import TestConfig, Config, load_config
+from .configurations import ExperimentConfig, Config, load_config
 
-test_config = TestConfig()
+experiment_config = ExperimentConfig()
 
 BASE_CONFIG_PATH = "configs/config.yaml"
 
@@ -22,7 +22,7 @@ def init_all_configs():
     print("Initializing Configs")
     global_vars = globals()
     config_map = {
-        "test_config": TestConfig,
+        "experiment_config": ExperimentConfig,
     }
 
     for var_name, cls in config_map.items():
@@ -41,7 +41,7 @@ loggers = {
 
 def init_loggers():
     print("Initializing Loggers")
-    log_dir = Path(test_config.log_dir)
+    log_dir = Path(experiment_config.log_dir)
     logging.basicConfig(handlers=[], force=True)
 
     formatter = logging.Formatter('[%(asctime)s] [%(levelname)-8s] %(name)s: %(message)s')

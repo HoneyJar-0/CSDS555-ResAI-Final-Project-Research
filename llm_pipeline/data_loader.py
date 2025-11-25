@@ -2,6 +2,8 @@ import os
 import pandas as pd
 from torch.utils.data import Dataset, DataLoader
 
+from configs import experiment_config
+
 # Dataset Adapter for Pandas DataFrame
 class DFDataset(Dataset):
     def __init__(self, df):
@@ -14,24 +16,23 @@ class DFDataset(Dataset):
         return self.df[idx]
 
 class PromptDataLoader:
-    def __init__(self, start_uuid, end_uuid, path="./data/input") -> None:
+    def __init__(self, start_uuid, end_uuid) -> None:
         """
         Path to data folder
         start_uuid starts from 0
         """
-        self.data_path = path
         self.uuid = start_uuid
         self.end_uuid = end_uuid
 
-        df_id = pd.read_csv(f'{path}/identities.csv')
+        df_id = pd.read_csv(f'{experiment_config.input_dir}/identities.csv')
         self.identities = df_id.set_index("id")["identity"].to_dict()
 
-        df_scen = pd.read_csv(f'{path}/scenarios.csv')
+        df_scen = pd.read_csv(f'{experiment_config.input_dir}/scenarios.csv')
         self.scenarios = df_scen.set_index("id")["scenario"].to_dict()
 
     def load_parquet_to_df(self, batch_size):
         print("Reading Data")
-        parq_par = os.path.join(self.data_path, "dataset")
+        parq_par = os.path.join(experiment_config.input_dir, "dataset")
         if not os.path.exists(parq_par):
             raise FileNotFoundError("Parquet filepath either wrong or Parquet files not generated.")
 

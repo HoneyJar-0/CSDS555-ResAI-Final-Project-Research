@@ -1,4 +1,6 @@
 from dataclasses import dataclass, is_dataclass
+
+import torch
 import yaml
 
 
@@ -12,22 +14,41 @@ class Config:
     models_dir: str = "data/models"
 
 @dataclass
-class TestConfig(Config):
+class ExperimentConfig(Config):
     # Model IDs
+    worker_name: str = ""
     model_id: str = ""
+    start_uuid: int = 0
+    end_uuid: int = 0
+    # Tokenizer
+    max_seq_length: int = 0
+    padding_side: str = "left"
     # Generate
-    max_new_tokens: int = 100
+    max_new_tokens: int = 0
+    batch_size: int = 0
+    load_in_4bit: bool = True
+    model_dtype: torch.dtype = None
     temperature: float = 1.0
     top_p: float = 0.9
     top_k: int = 50
+    # Batching
+    buffer_check_count: int = 100
+    max_parquet_size_mib: float = 90.0
+    # Logging
     tensorboard_active: bool = False
-    tensorboard_port: int = 6006
-    log_steps: int = 10
+    tensorboard_port: int = 6543
+    log_interval: int = 10
     log_limit: int = 3
 
 _converters = {
-    #"optimizer_cls": lambda x: getattr(torch.optim, x),
+    "model_dtype": lambda x: _safe_torch_getattr(x)
 }
+
+def _safe_torch_getattr(x):
+    try:
+        return getattr(torch, x)
+    except Exception:
+        return None
 
 def _recursive_load(cfg_obj, yaml_dict):
     for key, value in yaml_dict.items():

@@ -5,6 +5,7 @@ from datetime import datetime
 
 import psutil
 import torch
+import port_forwarding
 
 from tqdm import tqdm
 from torch.utils.tensorboard import SummaryWriter
@@ -28,6 +29,8 @@ class Benchmark:
 
         if experiment_config.tensorboard_active:
             self.tensorboard = SummaryWriter(log_dir=os.path.join(experiment_config.log_dir, datetime.now().strftime(experiment_config.log_format)))
+            port_forwarding.launch_tensorboard()
+
 
     def get_model_name(self, model_id: str) -> str:
         model_dict = {

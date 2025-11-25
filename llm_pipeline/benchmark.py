@@ -104,13 +104,16 @@ class Benchmark:
             decoded = self.tokenizer.batch_decode(outputs)
             
             # Post process batch
-            cleaned = ""
+            cleaned = []
             if "mistral" in self.model_name.lower():
                 cleaned = [r.replace("[INST]", "").replace("<s>", "").replace("</s>", "").strip().split("[/INST]")[-1] for r in decoded]
             elif "llama" in self.model_name.lower():
-                cleaned = [r.split("<|start_header_id|>assistant<|end_header_id|>")[1].split("<|eot_id|>")[0].strip() for r in decoded]
-            
-            if cleaned == "":
+                for r in decoded:
+                    cleaned_str = r.split("<|start_header_id|>assistant<|end_header_id|>")[1]
+                    cleaned_str = cleaned_str.split("<|eot_id|>")[1] if cleaned_str.split("<|eot_id|>")[1] else cleaned_str.split("<|eot_id|>")[0]
+                    cleaned.append(cleaned_str)
+                #cleaned = [r.split("<|start_header_id|>assistant<|end_header_id|>")[1].split("<|eot_id|>")[0].strip() for r in decoded]
+            if not cleaned:
                 raise ValueError(f"Empty output. Check Decoded:\n{decoded}")
 
             # Store aligned with original IDs

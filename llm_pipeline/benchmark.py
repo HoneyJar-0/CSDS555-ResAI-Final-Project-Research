@@ -109,10 +109,10 @@ class Benchmark:
                 cleaned = [r.replace("[INST]", "").replace("<s>", "").replace("</s>", "").strip().split("[/INST]")[-1] for r in decoded]
             elif "llama" in self.model_name.lower():
                 for r in decoded:
-                    cleaned_str = r.split("<|start_header_id|>assistant<|end_header_id|>")[1]
-                    cleaned_str = cleaned_str.split("<|eot_id|>")[1] if cleaned_str.split("<|eot_id|>")[1] else cleaned_str.split("<|eot_id|>")[0]
-                    cleaned.append(cleaned_str)
-                #cleaned = [r.split("<|start_header_id|>assistant<|end_header_id|>")[1].split("<|eot_id|>")[0].strip() for r in decoded]
+                    cleaned_r = r.split("<|start_header_id|>assistant<|end_header_id|>")[-1].strip().split('\n', 1)[-1].replace("<|eot_id|>","")
+                    if not cleaned_r:
+                        raise ValueError(f"Over pruned string found in Decoded for llama model. Original String:\n{r}")
+                    cleaned.append(cleaned_r)
             if not cleaned:
                 raise ValueError(f"Empty output. Check Decoded:\n{decoded}")
 
@@ -133,8 +133,6 @@ class Benchmark:
 def pipeline():
     benchmark = Benchmark().run()
     df = pd.read_parquet(benchmark)
-    for r in df["response"]:
-        print(r)
 
 if __name__ == "__main__":
     pipeline()

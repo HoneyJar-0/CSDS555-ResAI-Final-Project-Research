@@ -21,10 +21,10 @@ trap 'requeue_handler' SIGTERM
 
 mkdir console_logs/
 module load python/3.14
-module load cuda/13.0        	  # load Python 3.11.10 (highest compatible with PyTorch)
-python3 -m venv ResAIProject	          # create virtual environment
-source ResAIProject/bin/activate   	  # activate virtual environment
-pip install -r requirements.txt           # install from requirements.txt. Alternatively, list out the pip3 installs
+module load cuda/13.0 
+python3 -m venv ResAIProject
+source ResAIProject/bin/activate
+pip install -r requirements.txt 
 python3 main.py &
 wait
 mv *.out console_logs/

@@ -3,15 +3,16 @@ import re
 import gc
 from datetime import datetime
 
-import psutil
 import torch
+import psutil
+import pandas as pd
 
 from tqdm import tqdm
-from torch.utils.tensorboard import SummaryWriter
 from unsloth import FastLanguageModel
+from torch.utils.tensorboard import SummaryWriter
 
-from llm_pipeline.data_loader import PromptDataLoader
 from parquet_handler import BatchWriter
+from llm_pipeline.data_loader import PromptDataLoader
 
 from configs import experiment_config
 
@@ -53,39 +54,11 @@ class Benchmark:
             load_in_4bit = experiment_config.load_in_4bit,
         )
 
-        tokenizer.padding_side = experiment_config.padding_side
+        tokenizer.padding_side = "left"
+        tokenizer.truncation_side = "left"
         tokenizer.pad_token = tokenizer.eos_token
-        tokenizer.truncation_side = experiment_config.padding_side
 
         return model, tokenizer
-
-    def extract_responses(self, outputs: list) -> list:
-        """
-        Extract only the text generated in the ### Response: section from each output.
-        """
-        responses = []
-
-        for out in outputs:
-            text = out
-
-            # Remove all special tokens like <|begin_of_text|>, <|finetune_right_pad_id|>
-            text = re.sub(r"<\|.*?\|>", "", text)
-            text = re.sub(r"</s>|<s>", "", text)
-
-            # Extract everything after the last ### Response:
-            if "### Response:" in text:
-                # Take text after the last occurrence of ### Response:
-                text = text.split("### Response:")[-1]
-
-            # Remove everything after the next ### Input (if any)
-            text = text.split("### Input:")[0]
-
-            # Strip leading/trailing whitespace
-            text = text.strip()
-
-            responses.append(text)
-
-        return responses
 
     def run(self):
         """
@@ -95,9 +68,18 @@ class Benchmark:
         FastLanguageModel.for_inference(self.model)  # Enable native 2x faster inference
 
         for i,batch in tqdm(enumerate(self.loader), total=len(self.loader), desc="Processing Batches"):
+            chat_prompts = [
+                self.tokenizer.apply_chat_template(
+                    conv,
+                    tokenize=False,
+                    add_generation_prompt=True
+                )
+                for conv in batch[1]
+            ]
+            
             # Create prompts for inputs for batch
             inputs = self.tokenizer(
-                batch[1],
+                chat_prompts,
                 return_tensors="pt",
                 padding=True,
                 truncation=True,
@@ -113,13 +95,13 @@ class Benchmark:
             )
 
             decoded = self.tokenizer.batch_decode(outputs)
-
+            
             # Post process batch
-            processed_batch = self.extract_responses(decoded)
+            cleaned = [r.replace("[INST]", "").replace("<s>", "").replace("</s>", "").strip().split("[/INST]")[-1] for r in decoded]
 
             # Store aligned with original IDs
-            for id, out in zip(batch[0], processed_batch):
-                self.writer.add(id, out)
+            for id, out in zip(batch[0], cleaned):
+                self.writer.add(id, out.strip())
 
             if experiment_config.tensorboard_active and i%experiment_config.log_interval == 0:
                 self.tensorboard.add_scalar("Progress/Percentage", i/len(self.loader)*100, i)
@@ -133,6 +115,9 @@ class Benchmark:
 
 def pipeline():
     benchmark = Benchmark().run()
+    df = pd.read_parquet(benchmark)
+    for r in df["response"]:
+        print(r)
 
 if __name__ == "__main__":
     pipeline()

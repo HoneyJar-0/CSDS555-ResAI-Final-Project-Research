@@ -1,8 +1,8 @@
 # Model Loading ----- CHANGE THIS -----
-model_id: "llama" #one of: mistral, gemma, or llama
+model_id: "" #one of: mistral, gemma, or llama
 start_uuid: 0
-end_uuid: 1
-worker_name: "Samar"
+end_uuid: 0
+worker_name: ""
 
 # Tokenizer Params
 max_seq_length: 256

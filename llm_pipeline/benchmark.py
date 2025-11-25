@@ -18,11 +18,11 @@ from configs import experiment_config
 process = psutil.Process(os.getpid())
 
 class Benchmark:
-    def __init__(self, start_uuid=0, end_uuid=50):
+    def __init__(self):
         self.model_name = self.get_model_name(experiment_config.model_id)
         self.model, self.tokenizer = self.load_model()
 
-        data = PromptDataLoader(start_uuid=start_uuid, end_uuid=end_uuid)
+        data = PromptDataLoader()
         self.loader = data.load_parquet_to_df(batch_size=experiment_config.batch_size)
         self.writer = BatchWriter()
 
@@ -70,7 +70,6 @@ class Benchmark:
 
             # Remove all special tokens like <|begin_of_text|>, <|finetune_right_pad_id|>
             text = re.sub(r"<\|.*?\|>", "", text)
-
             text = re.sub(r"</s>|<s>", "", text)
 
             # Extract everything after the last ### Response:
@@ -130,17 +129,11 @@ class Benchmark:
 
         # Final flush to save remaining data
         out_path = self.writer.flush()
-
         return out_path
 
-def pipeline(config):
-    runner = Benchmark(start_uuid=config["start"], end_uuid=config["end"])
-    results = runner.run()
-    print(results)
+def pipeline():
+    benchmark = Benchmark().run()
+    print(benchmark)
 
 if __name__ == "__main__":
-    s_id = 0
-    e_id = 10
-
-    runner = Benchmark(start_uuid=s_id, end_uuid=e_id)
-    results = runner.run()
+    pipeline()

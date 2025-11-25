@@ -1,7 +1,7 @@
 # Model Loading ----- CHANGE THIS -----
 model_id: "mistral"
 start_uuid: 0
-end_uuid: 0
+end_uuid: 12
 worker_name: "Shafath"
 
 # Tokenizer Params

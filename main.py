@@ -10,14 +10,6 @@ def setup():
         #remove big dataset
         if os.path.exists("./data/input/dataset.parquet"):
             os.remove("./data/input/dataset.parquet")
-    
-    config = {}
-    with open('./config.json','r')as fp:
-        config = json.load(fp)
-    if os.path.exists('./notice.bak'):
-        with open('./notice.bak','r') as fp:
-            config["start"] = int(fp.readline())
-    return config
 
 if __name__ == '__main__':
     import data.output.response_handler as rh

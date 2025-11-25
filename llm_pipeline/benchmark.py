@@ -32,7 +32,7 @@ class Benchmark:
 
     def get_model_name(self, model_id: str) -> str:
         model_dict = {
-            "llama": "unsloth/Meta-Llama-3.1-8B-bnb-4bit",
+            "llama": "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit",
             "gemma": "unsloth/gemma-3-12b-it-unsloth-bnb-4bit",
             "mistral": "unsloth/mistral-7b-instruct-v0.3-bnb-4bit"
         }
@@ -53,6 +53,13 @@ class Benchmark:
             dtype = experiment_config.model_dtype,
             load_in_4bit = experiment_config.load_in_4bit,
         )
+
+        if "gemma" in self.model_name:
+            from unsloth.chat_templates import get_chat_template
+            tokenizer = get_chat_template(
+                tokenizer,
+                chat_template = "gemma-3",
+            )
 
         tokenizer.padding_side = "left"
         tokenizer.truncation_side = "left"
@@ -97,7 +104,12 @@ class Benchmark:
             decoded = self.tokenizer.batch_decode(outputs)
             
             # Post process batch
-            cleaned = [r.replace("[INST]", "").replace("<s>", "").replace("</s>", "").strip().split("[/INST]")[-1] for r in decoded]
+            if "mistral" in self.model_name:
+		    cleaned = [r.replace("[INST]", "").replace("<s>", "").replace("</s>", "").strip().split("[/INST]")[-1] for r in decoded]
+	   elif "llama" in self.model_name:
+		    match = re.search(r"<\|start_header_id\|>assistant<\|end_header_id\|>\n\n(.*?)<\|eot_id\|>", decoded, re.DOTALL)
+		    if match:
+    			cleaned = match.group(1).strip()
 
             # Store aligned with original IDs
             for id, out in zip(batch[0], cleaned):

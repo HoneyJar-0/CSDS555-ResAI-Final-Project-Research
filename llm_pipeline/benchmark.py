@@ -54,6 +54,10 @@ class Benchmark:
             load_in_4bit = experiment_config.load_in_4bit,
         )
 
+        tokenizer.padding_side = "left"
+        tokenizer.truncation_side = "left"
+        tokenizer.pad_token = tokenizer.eos_token
+
         if "gemma" in self.model_name:
             from unsloth.chat_templates import get_chat_template
             tokenizer = get_chat_template(
@@ -61,13 +65,9 @@ class Benchmark:
                 chat_template = "gemma-3",
             )
 
-        tokenizer.padding_side = "left"
-        tokenizer.truncation_side = "left"
-        tokenizer.pad_token = tokenizer.eos_token
-
         return model, tokenizer
 
-    def run(self):
+    def run(self) -> str:
         """
         Runs the benchmark
         """
@@ -104,12 +104,16 @@ class Benchmark:
             decoded = self.tokenizer.batch_decode(outputs)
             
             # Post process batch
+            cleaned = ""
             if "mistral" in self.model_name:
-		    cleaned = [r.replace("[INST]", "").replace("<s>", "").replace("</s>", "").strip().split("[/INST]")[-1] for r in decoded]
-	   elif "llama" in self.model_name:
-		    match = re.search(r"<\|start_header_id\|>assistant<\|end_header_id\|>\n\n(.*?)<\|eot_id\|>", decoded, re.DOTALL)
-		    if match:
-    			cleaned = match.group(1).strip()
+                cleaned = [r.replace("[INST]", "").replace("<s>", "").replace("</s>", "").strip().split("[/INST]")[-1] for r in decoded]
+            elif "llama" in self.model_name:
+                match = re.search(r"<\|start_header_id\|>assistant<\|end_header_id\|>\n\n(.*?)<\|eot_id\|>", decoded, re.DOTALL)
+                if match:
+                    cleaned = match.group(1).strip()
+            
+            if cleaned == "":
+                raise ValueError(f"Empty output. Check Decoded:\n{decoded}")
 
             # Store aligned with original IDs
             for id, out in zip(batch[0], cleaned):

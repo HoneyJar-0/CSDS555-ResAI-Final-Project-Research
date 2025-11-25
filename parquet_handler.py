@@ -31,9 +31,9 @@ class BatchWriter:
             print("Memory Full, Flushing Data")
             self.flush()
 
-    def flush(self):
+    def flush(self) -> str:
         if not self.buffer:
-            return
+            return ""
 
         filename = f"part_{self.file_counter:04d}_{time.strftime('%Y%m%d-%H%M%S')}.parquet"
         filepath = os.path.join(self.output_dir, filename)

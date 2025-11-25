@@ -10,7 +10,7 @@ from tqdm import tqdm
 from torch.utils.tensorboard import SummaryWriter
 from unsloth import FastLanguageModel
 
-from data_loader import PromptDataLoader
+from llm_pipeline.data_loader import PromptDataLoader
 from parquet_handler import BatchWriter
 
 from configs import experiment_config
@@ -133,7 +133,6 @@ class Benchmark:
 
 def pipeline():
     benchmark = Benchmark().run()
-    print(benchmark)
 
 if __name__ == "__main__":
     pipeline()

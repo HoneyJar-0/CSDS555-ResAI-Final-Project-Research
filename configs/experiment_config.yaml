@@ -1,5 +1,5 @@
 # Model Loading ----- CHANGE THIS -----
-model_id: "llama" #one of: mistral, gemma, or llama
+model_id: "gemma" #one of: mistral, gemma, or llama
 start_uuid: 0
 end_uuid: 10
 worker_name: "Samar"

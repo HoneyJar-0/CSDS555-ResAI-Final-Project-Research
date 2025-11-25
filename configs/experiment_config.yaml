@@ -1,8 +1,8 @@
 # Model Loading ----- CHANGE THIS -----
 model_id: "" #one of: mistral, gemma, or llama
 start_uuid: 0
-end_uuid: 0
-worker_name: ""
+end_uuid: 500
+worker_name: "Test"
 
 # Tokenizer Params
 max_seq_length: 256
@@ -10,7 +10,7 @@ padding_side: left
 
 # Model Generation Parameters
 max_new_tokens: 256
-batch_size: 2
+batch_size: 100
 load_in_4bit: True
 model_dtype: None
 temperature: 0.0

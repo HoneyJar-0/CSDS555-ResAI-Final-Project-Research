@@ -16,14 +16,11 @@ class DFDataset(Dataset):
         return self.df[idx]
 
 class PromptDataLoader:
-    def __init__(self, start_uuid, end_uuid) -> None:
+    def __init__(self) -> None:
         """
         Path to data folder
         start_uuid starts from 0
         """
-        self.uuid = start_uuid
-        self.end_uuid = end_uuid
-
         df_id = pd.read_csv(f'{experiment_config.input_dir}/identities.csv')
         self.identities = df_id.set_index("id")["identity"].to_dict()
 
@@ -38,7 +35,7 @@ class PromptDataLoader:
 
         df = pd.read_parquet(
             parq_par,
-            filters=[("UUID", ">=", self.uuid), ("UUID", "<", self.end_uuid)]
+            filters=[("UUID", ">=", experiment_config.start_uuid), ("UUID", "<", experiment_config.end_uuid)],
         )
         print("Data Loaded Shape: ", df.shape)
         dataset = DFDataset(df)

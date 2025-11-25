@@ -33,6 +33,14 @@ def init_all_configs():
     print("Initializing Directories")
     instance = load_config(BASE_CONFIG_PATH, Config())
     init_dirs(instance)
+
+    print("Checking for update via notice.bak")
+    if os.path.exists('./notice.bak'):
+        with open('./notice.bak','r') as fp:
+            updated_uuid = int(fp.readline())
+            experiment_config.start_uuid = updated_uuid
+            print(f"Found notice.bak, updated start UUID to {updated_uuid}")
+
     print("All Configs Initialized")
 
 loggers = {

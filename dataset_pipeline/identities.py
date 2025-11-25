@@ -1,3 +1,5 @@
+from configs import experiment_config
+
 def get_queer_attributes():
     '''
     Takes a string of identities from the GenderCensus and organizes the identities into one of: 
@@ -61,7 +63,7 @@ def attribute_pairing(umbrella, gender, so, ro):
     return permutations
 
 def save_identities_to_file(identities):
-    with open("data/input/identities.csv", 'w') as fp:
+    with open(f"{experiment_config.input_dir}/identities.csv", 'w') as fp:
         fp.write("id,identity\n")
         for i, ident in enumerate(identities):
             fp.write(f"{i},{ident}\n")

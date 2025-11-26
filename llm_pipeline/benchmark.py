@@ -117,15 +117,18 @@ class Benchmark:
                 raise ValueError(f"Empty output. Check Decoded:\n{decoded}")
 
             # Store aligned with original IDs
+            notice_id = 0
             for id, out in zip(batch[0], cleaned):
                 self.writer.add(id, out.strip())
+                notice_id = id
 
             if experiment_config.tensorboard_active and i%experiment_config.log_interval == 0:
                 self.tensorboard.add_scalar("Progress/Percentage", i/len(self.loader)*100, i)
                 self.tensorboard.add_scalar("Current UUID", batch[0][0], i)
                 self.tensorboard.add_scalar("GPU VRAM Allocated (GB)", torch.cuda.memory_allocated(0) / 1e9, i)
                 self.tensorboard.add_scalar("CPU RAM Allocated (GB)", process.memory_info().rss / 1e9, i)
-
+            with open('./notice.txt', 'w')as fp:
+                fp.write(str(notice_id))
         # Final flush to save remaining data
         out_path = self.writer.flush()
         return out_path

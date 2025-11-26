@@ -56,7 +56,7 @@ class Benchmark:
 
         tokenizer.padding_side = "left"
         tokenizer.truncation_side = "left"
-        tokenizer.pad_token = tokenizer.eos_token
+        #tokenizer.pad_token = tokenizer.eos_token
 
         if "gemma" in self.model_name:
             from unsloth.chat_templates import get_chat_template
@@ -108,11 +108,13 @@ class Benchmark:
             if "mistral" in self.model_name.lower():
                 cleaned = [r.replace("[INST]", "").replace("<s>", "").replace("</s>", "").strip().split("[/INST]")[-1] for r in decoded]
             elif "llama" in self.model_name.lower():
-                for r in decoded:
+                for idx, r in enumerate(decoded):
                     cleaned_r = r.split("<|start_header_id|>assistant<|end_header_id|>")[-1].strip().split('\n', 1)[-1].replace("<|eot_id|>","")
                     if not cleaned_r:
-                        raise ValueError(f"Over pruned string found in Decoded for llama model. Original String:\n{r}")
+                        raise ValueError(f"Over pruned string found in Decoded for llama model. UUID: {batch[0][idx]} Original String:\n{r}")
+
                     cleaned.append(cleaned_r)
+
             if not cleaned:
                 raise ValueError(f"Empty output. Check Decoded:\n{decoded}")
 
@@ -127,6 +129,7 @@ class Benchmark:
                 self.tensorboard.add_scalar("Current UUID", batch[0][0], i)
                 self.tensorboard.add_scalar("GPU VRAM Allocated (GB)", torch.cuda.memory_allocated(0) / 1e9, i)
                 self.tensorboard.add_scalar("CPU RAM Allocated (GB)", process.memory_info().rss / 1e9, i)
+            print(f"Flushed batch {i} to {self.writer.flush()}")
             with open('./notice.txt', 'w')as fp:
                 fp.write(str(notice_id))
         # Final flush to save remaining data
@@ -135,7 +138,6 @@ class Benchmark:
 
 def pipeline():
     benchmark = Benchmark().run()
-    df = pd.read_parquet(benchmark)
 
 if __name__ == "__main__":
     pipeline()

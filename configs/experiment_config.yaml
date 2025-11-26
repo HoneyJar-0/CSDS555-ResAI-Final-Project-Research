@@ -1,0 +1,28 @@
+# Model Loading ----- CHANGE THIS -----
+model_id: "" #one of: mistral, gemma, or llama
+start_uuid: 0
+end_uuid: 500
+worker_name: "Test"
+
+# Tokenizer Params
+max_seq_length: 256
+padding_side: left
+
+# Model Generation Parameters
+max_new_tokens: 256
+batch_size: 100
+load_in_4bit: True
+model_dtype: None
+temperature: 0.0
+top_p: 0.9
+top_k: 50
+
+# Batching parameters
+buffer_check_count: 100
+max_parquet_size_mib: 90.0
+
+# Tensorboard and Logging
+tensorboard_active: True
+tensorboard_port: 6006
+log_interval: 1
+log_limit: 3

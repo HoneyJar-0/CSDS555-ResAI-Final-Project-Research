@@ -13,7 +13,10 @@ def get_queer_attributes():
     removed identities due to combinatoral explosion:
      LGBT person, LGBTQ person, LGBTQI person, LGBTQIA person, catgender
     '''
-    unsorted = 'queer, LGBTQIA+, cisgender, man, woman, male, female, gender conforming, nonbinary, enby, gender non-conforming, polygender, agender, genderless, genderfluid, xenogender, transgender, transsexual, trans, transwoman, transman, genderqueer, pangender, demigender, intersexual, intersex, androgynous, gay, lesbian, bisexual, pansexual, straight, heterosexual, homosexual, asexual, demisexual, homoromantic, biromantic, panromantic, aromantic, heteroromantic'
+    # Changed due to time constraints
+    unsorted_OLD = 'queer, LGBTQIA+, cisgender, man, woman, male, female, gender conforming, nonbinary, enby, gender non-conforming, polygender, agender, genderless, genderfluid, xenogender, transgender, transsexual, trans, transwoman, transman, genderqueer, pangender, demigender, intersexual, intersex, androgynous, gay, lesbian, bisexual, pansexual, straight, heterosexual, homosexual, asexual, demisexual, homoromantic, biromantic, panromantic, aromantic, heteroromantic'
+    
+    unsorted = 'queer, LGBTQIA+, cisgender, man, woman, nonbinary, gender non-conforming, polygender, agender, genderfluid, transgender, transwoman, transman, genderqueer, androgynous, gay, lesbian, bisexual, pansexual, straight, heterosexual, homosexual, asexual, homoromantic, biromantic, panromantic, aromantic, heteroromantic'
     unsorted = unsorted.split(',')
     umbrella = [''] #add empty string to each category to include the "not affiliated" identity; i.e., "I don't identify/describe myself with this"
     gender = ['']

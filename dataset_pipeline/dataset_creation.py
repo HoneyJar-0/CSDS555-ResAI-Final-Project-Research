@@ -1,33 +1,21 @@
-import identities as identity_script
+from dataset_pipeline import identities as identity_script
 import os
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 from time import time
 
-df_id = pd.read_csv('./data/input/identities.csv')
-identities = df_id.set_index("id")["identity"].to_dict()
-
-df_scen = pd.read_csv('./data/input/scenarios.csv')
-scenarios = df_scen.set_index("id")["scenario"].to_dict()
+from configs import experiment_config
 
 def create_dataset():
-    if not os.path.isfile('./data/input/identities.txt'):
-        umbrella, gender, so, ro = identity_script.get_queer_attributes()
-        identity_script.save_identities_to_file(identity_script.attribute_pairing(umbrella, gender, so, ro))
-    '''
-    with open('./data/input/identities.txt') as f:
-        identity_list = [x.strip() for x in f]
+    if not os.path.isfile('./data/input/identities.csv'):
+        identity_script.identity_pipeline()
 
-    with open('./data/input/scenarios.txt') as f:
-        scenarios = [x.strip() for x in f]
-    '''
-
-    df_id = pd.read_csv('./data/input/identities.csv')
-    df_id = df_id.sort_values("id").reset_index(drop=True)
+    df_id = pd.read_csv(f'{experiment_config.input_dir}/identities.csv')
+    df_id.sort_values("id").reset_index(drop=True)
     identity_ids = df_id["id"].tolist()
-
-    df_scenario = pd.read_csv('./data/input/scenarios.csv')
+    
+    df_scenario = pd.read_csv(f'{experiment_config.input_dir}/scenarios.csv')
     df_scenario.sort_values("id").reset_index(drop=True)
     scenario_ids = df_scenario["id"].tolist()
 
@@ -35,7 +23,6 @@ def create_dataset():
     time_start = time()
 
     writer = None
-
     rows = []
 
     for sys_identity in identity_ids:
@@ -53,7 +40,7 @@ def create_dataset():
                     table = pa.Table.from_pandas(df)
 
                     if writer is None:
-                        writer = pq.ParquetWriter("./data/input/dataset.parquet", table.schema)
+                        writer = pq.ParquetWriter(f"{experiment_config.input_dir}/dataset.parquet", table.schema)
                     writer.write_table(table)
 
                     rows = []
@@ -69,7 +56,7 @@ def create_dataset():
         df = pd.DataFrame(rows)
         table = pa.Table.from_pandas(df)
         if writer is None:
-            writer = pq.ParquetWriter("./data/input/dataset.parquet", table.schema)
+            writer = pq.ParquetWriter(f"{experiment_config.input_dir}/dataset.parquet", table.schema)
         writer.write_table(table)
 
     if writer:
@@ -105,29 +92,10 @@ def split_parquet(in_path, out_dir):
         out_path = os.path.join(out_dir, f"part_{file_idx}.parquet")
         pq.write_table(pa.concat_tables(buffered_tables), out_path)
 
-def generate_prompt(a_id, b_id, c_id):
-    a = identities[a_id]
-    b = identities[b_id]
-    scenario_template = scenarios[c_id]
-
-    sys_message = (
-        f"""You are a {a}. 
-Please react to the following scenario paying attention to the role of the individual in the scenario. 
-Use as many adjectives as possible when stating your reactions. Answer in no more than two sentences."""
-    )
-
-    user_message = scenario_template.format(b=b)
-
-    return [
-        {"role": "system", "content": sys_message},
-        {"role": "user",   "content": user_message}
-    ]
-
-
-if __name__ == "__main__":
+def pipeline():
     create_dataset()
-    split_parquet("./data/input/dataset.parquet", "./data/input/dataset")
+    split_parquet(f"{experiment_config.input_dir}/dataset.parquet", f"{experiment_config.input_dir}/dataset")
 
-    #remove big dataset
-    if os.path.exists("./data/input/dataset.parquet"):
-        os.remove("./data/input/dataset.parquet")
+    # Remove big dataset
+    if os.path.exists(f"{experiment_config.input_dir}/dataset.parquet"):
+        os.remove(f"{experiment_config.input_dir}/dataset.parquet")

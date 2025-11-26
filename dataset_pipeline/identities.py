@@ -1,3 +1,5 @@
+from configs import experiment_config
+
 def get_queer_attributes():
     '''
     Takes a string of identities from the GenderCensus and organizes the identities into one of: 
@@ -11,7 +13,10 @@ def get_queer_attributes():
     removed identities due to combinatoral explosion:
      LGBT person, LGBTQ person, LGBTQI person, LGBTQIA person, catgender
     '''
-    unsorted = 'queer, LGBTQIA+, cisgender, man, woman, male, female, gender conforming, nonbinary, enby, gender non-conforming, polygender, agender, genderless, genderfluid, xenogender, transgender, transsexual, trans, transwoman, transman, genderqueer, pangender, demigender, intersexual, intersex, androgynous, gay, lesbian, bisexual, pansexual, straight, heterosexual, homosexual, asexual, demisexual, homoromantic, biromantic, panromantic, aromantic, heteroromantic'
+    # Changed due to time constraints
+    unsorted_OLD = 'queer, LGBTQIA+, cisgender, man, woman, male, female, gender conforming, nonbinary, enby, gender non-conforming, polygender, agender, genderless, genderfluid, xenogender, transgender, transsexual, trans, transwoman, transman, genderqueer, pangender, demigender, intersexual, intersex, androgynous, gay, lesbian, bisexual, pansexual, straight, heterosexual, homosexual, asexual, demisexual, homoromantic, biromantic, panromantic, aromantic, heteroromantic'
+    
+    unsorted = 'queer, LGBTQIA+, cisgender, man, woman, nonbinary, gender non-conforming, polygender, agender, genderfluid, transgender, transwoman, transman, genderqueer, androgynous, gay, lesbian, bisexual, pansexual, straight, heterosexual, homosexual, asexual, homoromantic, biromantic, panromantic, aromantic, heteroromantic'
     unsorted = unsorted.split(',')
     umbrella = [''] #add empty string to each category to include the "not affiliated" identity; i.e., "I don't identify/describe myself with this"
     gender = ['']
@@ -61,15 +66,17 @@ def attribute_pairing(umbrella, gender, so, ro):
     return permutations
 
 def save_identities_to_file(identities):
-    with open("identities.csv", 'w') as fp:
+    with open(f"{experiment_config.input_dir}/identities.csv", 'w') as fp:
         fp.write("id,identity\n")
         for i, ident in enumerate(identities):
             fp.write(f"{i},{ident}\n")
 
-
-if __name__ == '__main__':
+def identity_pipeline():
     umbrella, gender, so, ro = get_queer_attributes()
     print(f"Number entries:\nUmbrella: {len(umbrella)}, Gender: {len(gender)}, SO: {len(so)}, RO: {len(ro)}")
     print(umbrella, gender, so, ro)
     permutations = attribute_pairing(umbrella, gender, so, ro)
     save_identities_to_file(permutations)
+
+if __name__ == '__main__':
+   identity_pipeline()

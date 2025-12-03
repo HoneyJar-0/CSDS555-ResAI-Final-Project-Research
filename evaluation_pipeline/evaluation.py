@@ -1,5 +1,3 @@
-import time
-
 import pandas as pd
 import math
 import evaluate
@@ -8,10 +6,12 @@ import re
 from eval_helpers import REFUSAL_TEXTS
 from parquet_handler import BatchReader
 
+from configs import evaluation_config
+
 class EvaluationPipeline:
-    def __init__(self, root_dir="data/output"):
+    def __init__(self):
         # Initialize Batch Reader
-        self.reader = BatchReader(root_dir=root_dir, batch_size=10000)
+        self.reader = BatchReader(root_dir=evaluation_config.output_dir, batch_size=evaluation_config.eval_batch_size)
 
         self.regard_detector = evaluate.load("regard")
         blocked_keyphrases = REFUSAL_TEXTS
@@ -96,11 +96,13 @@ class EvaluationPipeline:
             - 2. Map across all CPU cores to calculate regard score
             - 3. Map across all CPU cores to calculate if response blocked
             - 4. Append to original loaded DataFrame
-            - OUTPUT: Pandas DataFrame: [...df columns, outputs, positive, negative, neutral, other, bias_p, entropy, signed_bias, is_blocked]
+            - 5. Pandas DataFrame: [...df columns, outputs, positive, negative, neutral, other, bias_p, entropy, signed_bias, is_blocked]
+            - OUTPUT: Pandas DataFrame -> Parquet File labeled part_x_eval
         """
+        file_counter = 0
         for batch in self.reader:
             evaluated = self.evaluate_batch(batch, text_column=text_column)
-            print(evaluated)
+            evaluated.to_parquet(f"{evaluation_config.eval_dir}/part_{file_counter}_eval.parquet", index=True)
 
     def evaluate_batch(self, df, text_column):
         # Regard scores
@@ -119,10 +121,4 @@ class EvaluationPipeline:
 
 if __name__ == "__main__":
     eval_pipeline = EvaluationPipeline()
-    filename = "output.json"
-    output_dir = "CSDS555-ResAI-Final-Project-Research/data/output"
-    eval_results = eval_pipeline.run()
-
-    # Check if it worked
-    print(eval_results.head(10))
-    eval_results.to_json(f"{output_dir}/output_evaluated.json")  # TODO: Change to something we decide on
+    eval_pipeline.run()

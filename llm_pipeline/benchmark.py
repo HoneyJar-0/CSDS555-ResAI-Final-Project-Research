@@ -1,11 +1,9 @@
 import os
-import re
 import gc
 from datetime import datetime
 
 import torch
 import psutil
-import pandas as pd
 
 from tqdm import tqdm
 from unsloth import FastLanguageModel
@@ -109,6 +107,7 @@ class Benchmark:
             cleaned = []
             if "mistral" in self.model_name.lower():
                 cleaned = [r.replace("[INST]", "").replace("<s>", "").replace("</s>", "").strip().split("[/INST]")[-1] for r in decoded]
+
             elif "llama" in self.model_name.lower():
                 for idx, r in enumerate(decoded):
                     cleaned_r = r.split("<|start_header_id|>assistant<|end_header_id|>")[-1].strip().split('\n', 1)[-1].replace("<|eot_id|>","")
@@ -116,6 +115,10 @@ class Benchmark:
                         raise ValueError(f"Over pruned string found in Decoded for llama model. UUID: {batch[0][idx]} Original String:\n{r}")
 
                     cleaned.append(cleaned_r)
+            elif "gemma" in self.model_name.lower():
+                cleaned = [r.split("start_of_turn>model\n")[-1].split("<end_of_turn>")[0] for r in decoded]
+            else:
+                raise ValueError(f"Can only work with, 'mistral', 'llama' and 'gemma'. If you think model is correct check spelling of {self.model_name}")
 
             if not cleaned:
                 raise ValueError(f"Empty output. Check Decoded:\n{decoded}")

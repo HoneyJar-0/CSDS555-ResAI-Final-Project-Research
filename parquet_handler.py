@@ -1,6 +1,8 @@
 import pandas as pd
 import os
 import time
+
+import pyarrow as pa
 import pyarrow.dataset as ds
 
 from configs import experiment_config
@@ -49,39 +51,39 @@ class BatchWriter:
 
         return filepath
 
+
 class BatchReader:
-    def __init__(self, root_dir, filters=None, batch_size=10000):
+    def __init__(self, root_dir: str, filters= None, batch_size: int = 10000, file_batch_size=8192):
         self.dataset = ds.dataset(root_dir, format="parquet")
-        self.scanner = self.dataset.scanner(filter=filters, use_threads=True).to_batches()
         self.batch_size = batch_size
 
+        self.scanner = self.dataset.scanner(filter=filters, use_threads=True, batch_size=file_batch_size).to_batches()
         self.generator = self._batch_generator()
 
     def _batch_generator(self):
         buffer = []
         current_rows = 0
-        for batch in self.scanner:
-            df = batch.to_pandas()
-            buffer.append(df)
-            current_rows += len(df)
 
-            # Yield when batch size limit is hit
+        for batch in self.scanner:
+            buffer.append(batch)
+            current_rows += batch.num_rows
+
+            # Combine batches when batch_size rows have been collected
             if current_rows >= self.batch_size:
-                yield pd.concat(buffer, ignore_index=True)
+                combined_table = pa.Table.from_batches(buffer)
+                yield combined_table.to_pandas()
+
+                # Reset buffer
                 buffer = []
                 current_rows = 0
 
-        # Yield remaining data
+        # Yield any remaining data
         if buffer:
-            yield pd.concat(buffer, ignore_index=True)
+            combined_table = pa.Table.from_batches(buffer)
+            yield combined_table.to_pandas()
 
     def __iter__(self):
-        return self
+        return self.generator
 
-    def __next__(self):
+    def __next__(self) -> pd.DataFrame:
         return next(self.generator)
-
-    # Iteratively maps over all files without simultaneous loading
-    def map(self, function):
-        for batch in self.generator:
-            yield function(batch)

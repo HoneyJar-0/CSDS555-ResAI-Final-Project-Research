@@ -81,8 +81,6 @@ class Benchmark:
                 )
                 for conv in batch[1]
             ]
-            print(f"Chat Prompts: {chat_prompts}")
-            print([type(p) for p in chat_prompts])
 
             # Create prompts for inputs for batch
             inputs = self.tokenizer(

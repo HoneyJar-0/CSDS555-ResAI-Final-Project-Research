@@ -12,6 +12,7 @@ class Config:
     output_dir: str = "data/output"
     log_format: str = "%Y-%m-%d_%H%M%S"
     models_dir: str = "data/models"
+    eval_dir: str = "data/evaluations"
 
 @dataclass
 class ExperimentConfig(Config):
@@ -39,6 +40,10 @@ class ExperimentConfig(Config):
     tensorboard_port: int = 6543
     log_interval: int = 10
     log_limit: int = 3
+
+@dataclass
+class EvaluationConfig(Config):
+    eval_batch_size: int = 5
 
 _converters = {
     "model_dtype": lambda x: _safe_torch_getattr(x)

@@ -3,9 +3,10 @@ import os
 from dataclasses import fields
 from pathlib import Path
 
-from .configurations import ExperimentConfig, Config, load_config
+from .configurations import ExperimentConfig, EvaluationConfig, Config, load_config
 
 experiment_config = ExperimentConfig()
+evaluation_config = EvaluationConfig()
 
 BASE_CONFIG_PATH = "configs/config.yaml"
 

@@ -71,7 +71,7 @@ class PromptDataLoader:
         return uuid_list, data
 
 if __name__ == "__main__":
-    d = PromptDataLoader(0, 100)
+    d = PromptDataLoader()
     loader = d.load_parquet_to_df(5)
     for i, batch in enumerate(loader):
         print(i, batch[0], batch[1])

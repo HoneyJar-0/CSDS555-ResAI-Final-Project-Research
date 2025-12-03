@@ -50,19 +50,38 @@ class BatchWriter:
         return filepath
 
 class BatchReader:
-    def __init__(self, root_dir, filters=None, batch_size=-1):
+    def __init__(self, root_dir, filters=None, batch_size=10000):
         self.dataset = ds.dataset(root_dir, format="parquet")
-        self.scanner = self.dataset.scanner(filter=filters, batch_size=batch_size, use_threads=True)
-        self.iterator = iter(self.scanner)
+        self.scanner = self.dataset.scanner(filter=filters, use_threads=True).to_batches()
+        self.batch_size = batch_size
+
+        self.generator = self._batch_generator()
+
+    def _batch_generator(self):
+        buffer = []
+        current_rows = 0
+        for batch in self.scanner:
+            df = batch.to_pandas()
+            buffer.append(df)
+            current_rows += len(df)
+
+            # Yield when batch size limit is hit
+            if current_rows >= self.batch_size:
+                yield pd.concat(buffer, ignore_index=True)
+                buffer = []
+                current_rows = 0
+
+        # Yield remaining data
+        if buffer:
+            yield pd.concat(buffer, ignore_index=True)
 
     def __iter__(self):
         return self
 
     def __next__(self):
-        batch = next(self.iterator)
-        return batch.to_pandas()
+        return next(self.generator)
 
     # Iteratively maps over all files without simultaneous loading
-    def map(self, column, function):
-        for batch in self.iterator:
-            batch.to_pandas()[column].map(function)
+    def map(self, function):
+        for batch in self.generator:
+            yield function(batch)

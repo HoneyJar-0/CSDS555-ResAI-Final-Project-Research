@@ -15,5 +15,5 @@ args = parser.parse_args()
 df = pd.read_parquet(args.file_name)
 
 # 3. Print each response
-for i, r in enumerate(df["response"]):
-    print(i, "\n", r.strip(), '\n')
+for i, (index, row) in enumerate(df.iterrows()):
+    print(i, row)

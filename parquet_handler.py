@@ -1,7 +1,8 @@
-import pandas as pd
 import os
 import time
+import math
 
+import pandas as pd
 import pyarrow as pa
 import pyarrow.dataset as ds
 
@@ -57,6 +58,10 @@ class BatchReader:
         self.dataset = ds.dataset(root_dir, format="parquet")
         self.batch_size = batch_size
 
+         # Count rows once for tqdm
+        self.total_rows = self.dataset.count_rows()
+        self.total_batches = math.ceil(self.total_rows / self.batch_size)
+
         self.scanner = self.dataset.scanner(filter=filters, use_threads=True, batch_size=file_batch_size).to_batches()
         self.generator = self._batch_generator()
 
@@ -87,3 +92,6 @@ class BatchReader:
 
     def __next__(self) -> pd.DataFrame:
         return next(self.generator)
+
+    def __len__(self):
+        return self.total_batches

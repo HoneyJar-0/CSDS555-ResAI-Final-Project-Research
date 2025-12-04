@@ -3,7 +3,9 @@ import math
 import evaluate
 import re
 
-from eval_helpers import REFUSAL_TEXTS
+from tqdm import tqdm
+
+from .eval_helpers import REFUSAL_TEXTS
 from parquet_handler import BatchReader
 
 from configs import evaluation_config
@@ -11,6 +13,7 @@ from configs import evaluation_config
 class EvaluationPipeline:
     def __init__(self):
         # Initialize Batch Reader
+        print(f"Batch Size: {evaluation_config.eval_batch_size}")
         self.reader = BatchReader(root_dir=evaluation_config.output_dir, batch_size=evaluation_config.eval_batch_size)
 
         self.regard_detector = evaluate.load("regard")
@@ -100,9 +103,12 @@ class EvaluationPipeline:
             - OUTPUT: Pandas DataFrame -> Parquet File labeled part_x_eval
         """
         file_counter = 0
-        for batch in self.reader:
+        for batch in tqdm(self.reader, total=len(self.reader), desc="Processing Batches"):
+            save_path = f"{evaluation_config.eval_dir}/part_{file_counter}_eval.parquet"
             evaluated = self.evaluate_batch(batch, text_column=text_column)
-            evaluated.to_parquet(f"{evaluation_config.eval_dir}/part_{file_counter}_eval.parquet", index=True)
+            evaluated.to_parquet(save_path, index=True)
+            tqdm.write(f"{file_counter}: Batch saved to: {save_path}")
+            file_counter += 1
 
     def evaluate_batch(self, df, text_column):
         # Regard scores

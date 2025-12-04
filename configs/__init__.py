@@ -24,6 +24,7 @@ def init_all_configs():
     global_vars = globals()
     config_map = {
         "experiment_config": ExperimentConfig,
+        "evaluation_config": EvaluationConfig,
     }
 
     for var_name, cls in config_map.items():

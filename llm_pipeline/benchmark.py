@@ -6,6 +6,7 @@ from datetime import datetime
 import torch
 import psutil
 import pandas as pd
+import port_forwarding
 
 from tqdm import tqdm
 from unsloth import FastLanguageModel
@@ -29,6 +30,8 @@ class Benchmark:
 
         if experiment_config.tensorboard_active:
             self.tensorboard = SummaryWriter(log_dir=os.path.join(experiment_config.log_dir, datetime.now().strftime(experiment_config.log_format)))
+            port_forwarding.launch_tensorboard()
+
 
     def get_model_name(self, model_id: str) -> str:
         model_dict = {
@@ -83,7 +86,7 @@ class Benchmark:
                 )
                 for conv in batch[1]
             ]
-            
+
             # Create prompts for inputs for batch
             inputs = self.tokenizer(
                 chat_prompts,
@@ -102,7 +105,7 @@ class Benchmark:
             )
 
             decoded = self.tokenizer.batch_decode(outputs)
-            
+
             # Post process batch
             cleaned = []
             if "mistral" in self.model_name.lower():

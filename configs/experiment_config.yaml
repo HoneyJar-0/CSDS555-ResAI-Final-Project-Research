@@ -23,6 +23,6 @@ max_parquet_size_mib: 90.0
 
 # Tensorboard and Logging
 tensorboard_active: True
-tensorboard_port: 6006
+tensorboard_port: 6543
 log_interval: 1
 log_limit: 3

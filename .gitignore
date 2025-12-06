@@ -163,5 +163,6 @@ data/output/*
 data/logs/*
 *unsloth_compiled_cache
 *.parquet
+*.zip
 ResAIProject/
 console_logs/

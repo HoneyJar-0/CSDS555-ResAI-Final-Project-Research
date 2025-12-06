@@ -11,6 +11,6 @@ def setup():
 
 if __name__ == '__main__':
     setup()
-    bm.pipeline()
+    # bm.pipeline()
     
     

@@ -1,4 +1,4 @@
-from configs import experiment_config
+#from configs import experiment_config
 
 def get_queer_attributes():
     '''
@@ -39,7 +39,7 @@ def get_queer_attributes():
             flag = 'gender'
         elif attribute == 'androgynous':
             flag = 'so'
-        elif attribute == 'demisexual':
+        elif attribute == 'asexual1111':
             flag = 'ro'
     return umbrella, gender, so, ro
 
@@ -75,8 +75,72 @@ def identity_pipeline():
     umbrella, gender, so, ro = get_queer_attributes()
     print(f"Number entries:\nUmbrella: {len(umbrella)}, Gender: {len(gender)}, SO: {len(so)}, RO: {len(ro)}")
     print(umbrella, gender, so, ro)
-    permutations = attribute_pairing(umbrella, gender, so, ro)
-    save_identities_to_file(permutations)
+    #permutations = attribute_pairing(umbrella, gender, so, ro)
+    #save_identities_to_file(permutations)
+
+def get_ranges():
+    import pandas as pd
+    umbrella, gender, so, ro = get_queer_attributes()
+    pairings_df = pd.DataFrame(columns=['umbrella','so','ro','gender'])
+
+    for u in umbrella: #RIP Never-Nesters 2 :3
+        for s in so:
+            for r in ro:
+                for g in gender:
+                    if not (s == 'heterosexual' and r == 'heteroromantic' and (g == 'man' or g == 'male' or g == 'woman' or g == 'female')):
+                        temp = {
+                            'umbrella':[u],
+                            'so':[s],
+                            'ro':[r],
+                            'gender':[g]
+                        }
+                        pairings_df = pd.concat([pairings_df, pd.DataFrame(temp)], ignore_index = True)
+    for g in ['man','woman','male','female','']: #clean up crew: female and male were cut
+        temp = {
+            'umbrella':['nonqueer'],
+            'so':[''],
+            'ro':[''],
+            'gender':[g]
+        }
+        pairings_df = pd.concat([pairings_df,pd.DataFrame(temp)],ignore_index=True)
+    um_df = pd.DataFrame()
+    so_df = pd.DataFrame()
+    gen_df = pd.DataFrame()
+
+    pairings_df = pairings_df.reset_index()
+    pairings_df['index'] = pairings_df['index'].apply(lambda x: x*4)
+    pairings_df['end'] = pairings_df['index'].apply(lambda x: x + 3)
+    umbrella.append('nonqueer')
+    for u in umbrella:
+        subset = pairings_df[pairings_df['umbrella'] == u]
+        um_df[u] = pd.Series(idx_grouping(subset['index'].tolist(), subset['end'].tolist()))
+        print(f"umbrella {u} handled")
+    for s in so:
+        subset = pairings_df[pairings_df['so'] == s]
+        so_df[s] = pd.Series(idx_grouping(subset['index'].tolist(), subset['end'].tolist()))
+        print(f"so {s} handled")
+    for g in gender:
+        subset = pairings_df[pairings_df['gender'] == g]
+        gen_df[g] = pd.Series(idx_grouping(subset['index'].tolist(), subset['end'].tolist()))
+        print(f"gender {g} handled")
+    
+    um_df.to_csv('umbrella_idx.csv',index=False)
+    so_df.to_csv('so_idx.csv', index=False)
+    gen_df.to_csv('gender_idx.csv',index=False)
+    return (um_df, so_df, gen_df)
+
+
+def idx_grouping(start, end):
+    tracking_start = start[0]
+    pairs = []
+    for i in range(len(start)):
+        end_idx = i - 1
+        if end_idx >= 0 and start[i] != end[end_idx] + 1:
+            pairs.append([tracking_start, end[end_idx]])
+            tracking_start = start[i]
+    pairs.append([tracking_start, end[-1]])
+    return pairs
 
 if __name__ == '__main__':
-   identity_pipeline()
+   #identity_pipeline()
+   get_ranges()

@@ -165,3 +165,5 @@ data/logs/*
 *.parquet
 ResAIProject/
 console_logs/
+eval_logs/
+data/evaluations/

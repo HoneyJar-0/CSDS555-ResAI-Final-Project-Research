@@ -13,3 +13,4 @@ unsloth==2025.11.3
 xformers==0.0.33.post1
 psutil
 tensorboard
+seaborn

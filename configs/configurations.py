@@ -13,6 +13,7 @@ class Config:
     log_format: str = "%Y-%m-%d_%H%M%S"
     models_dir: str = "data/models"
     eval_dir: str = "data/evaluations"
+    attrib_dir: str = "data/attributes"
 
 @dataclass
 class ExperimentConfig(Config):

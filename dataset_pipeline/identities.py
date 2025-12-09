@@ -1,4 +1,4 @@
-#from configs import experiment_config
+from configs import experiment_config
 
 def get_queer_attributes():
     '''
@@ -124,10 +124,10 @@ def get_ranges():
         gen_df[g] = pd.Series(idx_grouping(subset['index'].tolist(), subset['end'].tolist()))
         print(f"gender {g} handled")
     
-    um_df.to_csv('umbrella_idx.csv',index=False)
-    so_df.to_csv('so_idx.csv', index=False)
-    gen_df.to_csv('gender_idx.csv',index=False)
-    return (um_df, so_df, gen_df)
+    um_df.to_csv(f'{experiment_config.attrib_dir}/umbrella_idx.csv',index=False)
+    so_df.to_csv(f'{experiment_config.attrib_dir}/so_idx.csv', index=False)
+    gen_df.to_csv(f'{experiment_config.attrib_dir}/gender_idx.csv',index=False)
+    return (pairings_df, um_df, so_df, gen_df)
 
 
 def idx_grouping(start, end):
@@ -142,5 +142,4 @@ def idx_grouping(start, end):
     return pairs
 
 if __name__ == '__main__':
-   #identity_pipeline()
-   get_ranges()
+   identity_pipeline()

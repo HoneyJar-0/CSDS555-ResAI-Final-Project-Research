@@ -4,6 +4,7 @@ from dataset_pipeline import dataset_creation as dc
 from dataset_pipeline import identities
 import ast
 import seaborn as sns
+from matplotlib import pyplot as plt
 
 def verify_uuid_match(df, identities_df):
     for column in df.columns.tolist():
@@ -44,20 +45,23 @@ def attribute_matching():
     verify_uuid_match(gen_df,identities_df)
     print('VERIFICATION COMPLETE\n' + '='*20)
 
-def get_scores(df, start, end):
+def get_scores(df):
     i = 0
-    df['score'] = pd.NA
-    while i < end:
+    df['score'] = pd.NA #PROBLEM?
+    while i < len(df):
+        start = df.iloc[i]['index']
+        end = df.iloc[i]['end']
         eval_df = pd.read_parquet(
             f"{experiment_config.eval_dir}",
-            filters=[("UUID", ">=", i), ("UUID", "<=", i+3)], #loads a dataframe for a given uuid range
+            filters=[("UUID", ">=", start), ("UUID", "<=", end)], #loads a dataframe for a given uuid range
         )
         #account for blocked responses
-        eval_df = eval_df[eval_df['is_blocked'] == 0]
+        #eval_df = eval_df[eval_df['is_blocked'] == 0]
         if len(eval_df) > 0:
             score = eval_df['signed_bias'].mean()
-            df.loc[df['index'] == i, 'score'] = score
-        i+=3
+            df.iat[i, df.columns.get_loc('score')] = score
+            #df.iloc['score'] = score
+        i+=1
 
     compute_and_graph_scores(df, 'umbrella')
     compute_and_graph_scores(df, 'so')
@@ -66,7 +70,8 @@ def get_scores(df, start, end):
     
 
 def compute_and_graph_scores(df:pd.DataFrame, filter):
-    filters = ['umbrella','so','gender']#ro
+    df = df.drop(columns=['index','end'])
+    filters = ['umbrella','so','ro', 'gender']#ro
     others = filters.remove(filter)
     columns = df[filter].unique().tolist()
     scores = pd.DataFrame(columns=columns).drop(columns=[''])
@@ -74,16 +79,26 @@ def compute_and_graph_scores(df:pd.DataFrame, filter):
         if col == '':
             continue
 
-        subset = df[df[filter] == col]
-        baseline = df[df[filter] == '']
-        merged = baseline.merge(subset,on=others,suffixes=['_base','_sub'])
-        scores[col] = -(merged['score_base'] - merged['score_sub'])
-    #at this point, scores contains some valid, some invalid results, but contains all of the signed bias scores we care for
-    scores = scores.dropna()
-    plot_summary(scores)
+        subset = df[df[filter] == col].drop(columns=[filter]).rename(columns={'score':'score_s'})
+        baseline = df[df[filter] == ''].drop(columns=[filter]).rename(columns={'score':'score_b'})
+        merged = pd.merge(left=baseline, right=subset,on=others,suffixes=('_b','_s'))
+
+        if len(merged) == 0:
+            scores = scores.drop(columns=[filter])
+            print("OY! column dropped !!!!!!!!!!!!!!!!!!!!!")
+            continue
+        scores[col] = -(merged['score_b'] - merged['score_s'])
+    #scores = scores.dropna()
+    if filter == 'gender':
+        scores = scores.drop(columns=['male','female']) #should not be considered due to workflow error
+    plot_summary(scores, filter)
 
 
-def plot_summary(values: pd.DataFrame):
+def plot_summary(values: pd.DataFrame, filter):
+    print(values.head(5))
+    from matplotlib.colors import LinearSegmentedColormap, TwoSlopeNorm
+    import matplotlib
+    matplotlib.use('Agg')
     # Melt into long format
     plot_df = values.melt(var_name="feature", value_name="value")
 
@@ -101,6 +116,11 @@ def plot_summary(values: pd.DataFrame):
         vmax=plot_df.value.max(),
     )
 
+    custom_palette = LinearSegmentedColormap.from_list(
+        "my_shap_palette",
+        ["red", "violet", "blue"]   # negative → zero → positive
+    )
+
     # Plot
     plt.figure(figsize=(12, 12))
     sns.scatterplot(
@@ -116,25 +136,10 @@ def plot_summary(values: pd.DataFrame):
     plt.axvline(0, color="grey", linestyle="--", linewidth=1)
     plt.title("Difference in P")
     plt.legend([], [], frameon=False)
-    plt.show()
-
-'''df_shap = df[["UUID", "identity_A", "identity_B", "scenario_id", "signed_bias"]]
-df_shap = df_shap[df_shap["UUID"] is in range of homosexuality] # Filter by UUID
-
-df_shap["identity_A"].info()
-
-df_pivot = df_shap.pivot_table(
-    index=['identity_B', 'scenario_id'],   # rows
-    columns='identity_A',               # columns
-    values='signed_bias',      # cell values
-    aggfunc='first'            # because (A,B,Scenario) is unique
-)'''
-
-
-
+    plt.savefig(f'{experiment_config.attrib_dir}/att_plot_{filter}.png')
+    #plt.show()
 
 if __name__ == '__main__':
     #attribute_matching()
     pairings_df, _, _, _ = identities.get_ranges()
-    print(len(pairings_df)*4)
-    get_scores(pairings_df,0,len(pairings_df)*4 + 1)
+    get_scores(pairings_df)

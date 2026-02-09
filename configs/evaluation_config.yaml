@@ -1,1 +1,5 @@
 eval_batch_size: 10000
+
+# Eval Diretory
+model_id: "mistral" #one of: mistral, gemma, or llama. Can be empty.
+user_id: "Shafath" #should be name of USERID in user_[USERID] folder. Can be empty.

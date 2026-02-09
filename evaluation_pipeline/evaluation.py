@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import math
 import evaluate
@@ -8,16 +10,41 @@ from tqdm import tqdm
 from .eval_helpers import REFUSAL_TEXTS
 from db_handler import ResponseReader, write_evaluations
 
-from configs import evaluation_config
+from configs import evaluation_config, experiment_config
+
+def get_eval_root() -> str:
+    output_dir = evaluation_config.output_dir
+    model_dir = evaluation_config.model_id
+    user_id = evaluation_config.user_id
+
+    if model_dir == "":
+        eval_root = os.path.join(output_dir)
+    elif user_id == "":
+        eval_root = os.path.join(output_dir, "model_"+model_dir)
+    else:
+        eval_root = os.path.join(output_dir, "model_"+model_dir, "user_"+user_id)
+
+    if not os.path.exists(eval_root):
+        raise FileNotFoundError(f"Error: {eval_root} is not valid. Please configure your evaluation_config.yaml to point to the correct root.")
+
+    print(f"Reading evaluation data from {eval_root}")
+    return str(eval_root)
 
 class EvaluationPipeline:
     def __init__(self):
         # Initialize Batch Reader
         print(f"Batch Size: {evaluation_config.eval_batch_size}")
+        """ TODO: Fix the following conflict:
+            - why input dir?
+            - why does responsereader need config parameters passed to it?
+        >>>> Updated DB Code
         self.reader = ResponseReader(
             input_dir=evaluation_config.input_dir,
             batch_size=evaluation_config.eval_batch_size
         )
+        >>>> Updated Eval code
+        self.reader = BatchReader(root_dir=get_eval_root(), batch_size=evaluation_config.eval_batch_size)
+        """
 
         self.regard_detector = evaluate.load("regard")
         blocked_keyphrases = REFUSAL_TEXTS

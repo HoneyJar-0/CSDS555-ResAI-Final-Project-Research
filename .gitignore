@@ -165,3 +165,4 @@ data/logs/*
 *.parquet
 ResAIProject/
 console_logs/
+*.out

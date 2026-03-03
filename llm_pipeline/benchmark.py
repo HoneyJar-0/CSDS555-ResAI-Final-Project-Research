@@ -4,7 +4,8 @@ from datetime import datetime
 
 import torch
 import psutil
-import port_forwarding
+import torch.distributed as dist
+from llm_pipeline import port_forwarding
 
 from tqdm import tqdm
 from vllm import LLM, SamplingParams
@@ -58,8 +59,8 @@ class Benchmark:
             enforce_eager=True,  # TODO: Disables CUDA graphs which records history of sorts
             dtype="auto",
             # dtype=experiment_config.model_dtype,  # TODO: different formatting than what we have.
-            max_model_len=experiment_config.batch_size,
-            max_num_seqs=experiment_config.max_seq_length,
+            max_model_len=experiment_config.max_seq_length,
+            max_num_seqs=experiment_config.batch_size,
             quantization= "bitsandbytes" if experiment_config.load_in_4bit else None,
         )
 
@@ -73,8 +74,15 @@ class Benchmark:
             _, chat_prompts = batch
 
             # Inference on batch
-            outputs = self.model.generate(
-                prompts=chat_prompts,
+            print(f"Prompt: {chat_prompts}")
+            # outputs = self.model.generate(
+            #     prompts=chat_prompts,
+            #     sampling_params=self.sampling_params,
+            #     use_tqdm=False
+            # )
+
+            outputs = self.model.chat(
+                messages=chat_prompts,
                 sampling_params=self.sampling_params,
                 use_tqdm=False
             )
@@ -98,7 +106,11 @@ class Benchmark:
         return out_path
 
 def pipeline():
-    benchmark = Benchmark().run()
+    try:
+        _ = Benchmark().run()
+    finally:
+        if dist.is_initialized():
+            dist.destroy_process_group()
 
 if __name__ == "__main__":
     pipeline()

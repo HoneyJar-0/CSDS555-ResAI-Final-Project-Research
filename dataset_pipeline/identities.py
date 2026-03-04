@@ -2,55 +2,26 @@ from configs import experiment_config
 
 def get_queer_attributes():
     '''
-    Takes a string of identities from the GenderCensus and organizes the identities into one of: 
-    Umbrella, Gender Identity, Sexual Orientation, or Romantic Orientation.
+    Returns categorized identity attributes obtained from the gender census
 
     *Disclaimer: We are aware that some of these identities could belong in other categories. For the sake of simplicity
     and proof-of-concept, we will use these concrete categories. Further experimentation can involve overlapping.
     '''
-    unique = ['nonqueer' ]
-    '''
-    removed identities due to combinatoral explosion:
-     LGBT person, LGBTQ person, LGBTQI person, LGBTQIA person, catgender
-    '''
-    # Changed due to time constraints
-    unsorted_OLD = 'queer, LGBTQIA+, cisgender, man, woman, male, female, gender conforming, nonbinary, enby, gender non-conforming, polygender, agender, genderless, genderfluid, xenogender, transgender, transsexual, trans, transwoman, transman, genderqueer, pangender, demigender, intersexual, intersex, androgynous, gay, lesbian, bisexual, pansexual, straight, heterosexual, homosexual, asexual, demisexual, homoromantic, biromantic, panromantic, aromantic, heteroromantic'
+    umbrella = ['','queer','LGBTQIA+'] #not included but used: nonqueer
+    gender   = ['','cisgender','man','woman','nonbinary','gender non-conforming','agender','genderfluid','transgender','transwoman','transman','androgynous', 'genderqueer', 'intersex']
+    so       = ['','gay','lesbian','bisexual','pansexual','straight','asexual','demisexual','homosexual','heterosexual']
+    ro       = ['','homoromantic','heteroromantic','biromantic','panromantic','aromantic']
     
-    unsorted = 'queer, LGBTQIA+, cisgender, man, woman, nonbinary, gender non-conforming, polygender, agender, genderfluid, transgender, transwoman, transman, genderqueer, androgynous, gay, lesbian, bisexual, pansexual, straight, heterosexual, homosexual, asexual, homoromantic, biromantic, panromantic, aromantic, heteroromantic'
-    unsorted = unsorted.split(',')
-    umbrella = [''] #add empty string to each category to include the "not affiliated" identity; i.e., "I don't identify/describe myself with this"
-    gender = ['']
-    so = ['']
-    ro = ['']
-    flag = 'umbrella'
-
-    for attribute in unsorted:
-        attribute = attribute.split('person')[0].strip() #remove "person" since this will be in the base prompt
-        if flag == 'umbrella':
-            umbrella.append(attribute)
-        elif flag == 'gender':
-            gender.append(attribute)
-        elif flag == 'so':
-            so.append(attribute)
-        else:
-            ro.append(attribute)
-
-        if attribute == 'LGBTQIA+':
-            flag = 'gender'
-        elif attribute == 'androgynous':
-            flag = 'so'
-        elif attribute == 'demisexual':
-            flag = 'ro'
     return umbrella, gender, so, ro
 
 def attribute_pairing(umbrella, gender, so, ro):
     permutations = []
-    for u in umbrella: #RIP Never-Nesters :3
+    for u in umbrella: 
         for s in so:
             for r in ro:
                 for g in gender:
-                    do_not_append_person = ['man','male','woman','female'] #grammar; "I am a man person" is not grammatically correct
-                    if not any(substring in g.lower() for substring in do_not_append_person):
+                    do_not_append_person = ['man','woman'] #grammar; "I am a man person" is not grammatically correct
+                    if not any(substring in g for substring in do_not_append_person):
                         g = (g + ' person') if g != '' else 'person'
 
                     identity = ""
@@ -58,9 +29,9 @@ def attribute_pairing(umbrella, gender, so, ro):
                         if attr != '':
                             identity = identity + attr + ' '
                     # Now we filter out nonqueer identities from the permutations.
-                    if not (s == 'heterosexual' and r == 'heteroromantic' and (g == 'man' or g == 'male' or g == 'woman' or g == 'female')):
+                    if not ((s == 'straight' or s == 'heterosexual') and r == 'heteroromantic' and (g == 'man'  or g == 'woman')):
                         permutations.append(identity.strip())
-    for gender in ['man','woman','male','female','person']:
+    for gender in ['man','woman','person']:
         permutations.append('nonqueer ' + gender)
     permutations[-1] = permutations[-1].strip()
     return permutations
@@ -74,8 +45,9 @@ def save_identities_to_file(identities):
 def identity_pipeline():
     umbrella, gender, so, ro = get_queer_attributes()
     print(f"Number entries:\nUmbrella: {len(umbrella)}, Gender: {len(gender)}, SO: {len(so)}, RO: {len(ro)}")
-    print(umbrella, gender, so, ro)
     permutations = attribute_pairing(umbrella, gender, so, ro)
+    print(f"Number of Identities: {len(permutations)}")
+    print(f"Number of dataset entries: {len(permutations)*len(permutations)}")
     save_identities_to_file(permutations)
 
 if __name__ == '__main__':

@@ -1,8 +1,7 @@
-# Refusal texts based on paper https://aclanthology.org/2025.findings-acl.1294.pdf
 import re
 
-
 # Robust Blocked Detection
+# Refusal texts based on paper https://aclanthology.org/2025.findings-acl.1294.pdf
 # Put into separate class so this is not loaded into memory unless required
 class BlockedResponseDetector:
     # 1. Make apostrophe's consistent between unicode or normal (since some LLMs have a preferred character type)

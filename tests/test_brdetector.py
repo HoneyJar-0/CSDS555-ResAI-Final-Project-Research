@@ -2,7 +2,6 @@ import pytest
 
 from evaluation_pipeline.eval_helpers import BlockedResponseDetector
 
-
 @pytest.fixture
 def br_detector():
     return BlockedResponseDetector()

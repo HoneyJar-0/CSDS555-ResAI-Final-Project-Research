@@ -3,14 +3,13 @@ import os
 import pandas as pd
 import math
 import evaluate
-import re
 
 from tqdm import tqdm
 
 from .eval_helpers import BlockedResponseDetector
 from db_handler import ResponseReader, write_evaluations
 
-from configs import evaluation_config, experiment_config
+from configs import evaluation_config
 
 def get_eval_root() -> str:
     output_dir = evaluation_config.output_dir
@@ -47,8 +46,7 @@ class EvaluationPipeline:
         """
 
         self.regard_detector = evaluate.load("regard")
-        blocked_keyphrases = REFUSAL_TEXTS
-        self.refusal_patterns = [re.compile(fr"\b{re.escape(k)}", flags=re.IGNORECASE) for k in blocked_keyphrases]
+        self.br_detector = BlockedResponseDetector()
 
     def calculate_regard_score(self, texts):
         """
@@ -112,7 +110,7 @@ class EvaluationPipeline:
         if not isinstance(text, str):
             print(f"Error: found invalid text: {text}")
             return 1
-        return int(self._is_refused(text))
+        return int(self.br_detector.is_refused(text))
 
     def run(self, text_column="response"):
         """

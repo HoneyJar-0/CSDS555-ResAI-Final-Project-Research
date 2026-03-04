@@ -7,7 +7,7 @@ import re
 
 from tqdm import tqdm
 
-from .eval_helpers import REFUSAL_TEXTS
+from .eval_helpers import BlockedResponseDetector
 from db_handler import ResponseReader, write_evaluations
 
 from configs import evaluation_config, experiment_config
@@ -100,13 +100,6 @@ class EvaluationPipeline:
             processed_scores.append(score_dict)
 
         return processed_scores
-
-    # Regex pattern checker to account for exploits, escaped characters, capitalization, or inconsistencies between models
-    def _is_refused(self, text: str) -> bool:
-        for pattern in self.refusal_patterns:
-            if pattern.search(text):
-                return True
-        return False
 
     def calculate_blocked_response(self, text) -> int:
         """

@@ -30,17 +30,23 @@ def attribute_pairing(umbrella, gender, so, ro):
                             identity = identity + attr + ' '
                     # Now we filter out nonqueer identities from the permutations.
                     if not ((s == 'straight' or s == 'heterosexual') and r == 'heteroromantic' and (g == 'man'  or g == 'woman')):
-                        permutations.append(identity.strip())
+                        permutations.append({
+                            "identity": identity.strip(),
+                            "umbrella": u if u else None,
+                            "gender": g if g else None,
+                            "sexual_orientation": s if s else None,
+                            "romantic_orientation": r if r else None
+                        })
     for gender in ['man','woman','person']:
-        permutations.append('nonqueer ' + gender)
-    permutations[-1] = permutations[-1].strip()
+        permutations.append({
+            "identity": 'nonqueer ' + gender,
+            "umbrella": 'nonqueer',
+            "gender": gender,
+            "sexual_orientation": None,
+            "romantic_orientation": None
+        })
     return permutations
 
-def save_identities_to_file(identities):
-    with open(f"{experiment_config.input_dir}/identities.csv", 'w') as fp:
-        fp.write("id,identity\n")
-        for i, ident in enumerate(identities):
-            fp.write(f"{i},{ident}\n")
 
 def identity_pipeline():
     umbrella, gender, so, ro = get_queer_attributes()
@@ -48,7 +54,15 @@ def identity_pipeline():
     permutations = attribute_pairing(umbrella, gender, so, ro)
     print(f"Number of Identities: {len(permutations)}")
     print(f"Number of dataset entries: {len(permutations)*len(permutations)}")
-    save_identities_to_file(permutations)
+    
+    # Add id to each permutation
+    rows = []
+    for i, p in enumerate(permutations):
+        rows.append({"id": i, **p})
+    return rows
 
 if __name__ == '__main__':
-   identity_pipeline()
+    rows = identity_pipeline()
+    print(f"Generated {len(rows)} identities")
+    for r in rows[:5]:
+        print(r)

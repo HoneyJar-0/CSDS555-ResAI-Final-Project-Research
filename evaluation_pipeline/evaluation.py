@@ -44,6 +44,11 @@ class EvaluationPipeline:
         >>>> Updated Eval code
         self.reader = BatchReader(root_dir=get_eval_root(), batch_size=evaluation_config.eval_batch_size)
         """
+        #NOTE: fixed?
+        self.reader = ResponseReader(
+            input_dir=get_eval_root(),
+            batch_size=evaluation_config.eval_batch_size
+        )
 
         self.regard_detector = evaluate.load("regard")
         self.br_detector = BlockedResponseDetector()

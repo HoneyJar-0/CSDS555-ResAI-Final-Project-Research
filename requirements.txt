@@ -61,3 +61,6 @@ tensorboard==2.20.0
 unsloth==2025.11.3
 vllm==0.16.0
 xformers==0.0.33.post1
+psutil
+tensorboard
+pytest==9.0.2

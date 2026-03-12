@@ -41,6 +41,8 @@ class ExperimentConfig(Config):
 @dataclass
 class EvaluationConfig(Config):
     eval_batch_size: int = 5
+    model_id: str = ""
+    user_id: str = ""
 
 _converters = {
     "model_dtype": lambda x: _safe_torch_getattr(x)

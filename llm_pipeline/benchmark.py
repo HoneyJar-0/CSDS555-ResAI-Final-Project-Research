@@ -1,15 +1,14 @@
 import os
-import re
 import gc
 from datetime import datetime
 
 import torch
 import psutil
-import pandas as pd
-import port_forwarding
+import torch.distributed as dist
+from llm_pipeline import port_forwarding
 
 from tqdm import tqdm
-from unsloth import FastLanguageModel
+from vllm import LLM, SamplingParams
 from torch.utils.tensorboard import SummaryWriter
 
 from parquet_handler import BatchWriter
@@ -22,7 +21,11 @@ process = psutil.Process(os.getpid())
 class Benchmark:
     def __init__(self):
         self.model_name = self.get_model_name(experiment_config.model_id)
-        self.model, self.tokenizer = self.load_model()
+        self.model = self.load_model()
+        self.sampling_params = SamplingParams(
+            temperature=experiment_config.temperature,
+            max_tokens=experiment_config.max_new_tokens
+        )
 
         data = PromptDataLoader()
         self.loader = data.load_parquet_to_df(batch_size=experiment_config.batch_size)
@@ -35,96 +38,59 @@ class Benchmark:
 
     def get_model_name(self, model_id: str) -> str:
         model_dict = {
-            "llama": "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit",
-            "gemma": "unsloth/gemma-3-12b-it-unsloth-bnb-4bit",
-            "mistral": "unsloth/mistral-7b-instruct-v0.3-bnb-4bit"
+            "llama": "meta-llama/Llama-3.1-8B-Instruct",
+            "gemma": "google/gemma-3-12b-it",
+            "mixtral": "mistralai/Mixtral-8x7B-Instruct-v0.1",
+            "qwen": "Qwen/Qwen3-8B"
         }
         if model_id.strip().lower() not in model_dict.keys():
             raise ValueError(f"Invalid Model Name, expected {list(model_dict.keys())} got {model_id}")
 
         return model_dict[model_id]
 
-    def load_model(self):
+    def load_model(self) -> LLM:
         """Loads model_id"""
         gc.collect()
         torch.cuda.empty_cache()
         torch.cuda.ipc_collect()
 
-        model, tokenizer = FastLanguageModel.from_pretrained(
-            model_name = self.model_name,
-            max_seq_length = experiment_config.max_seq_length,
-            dtype = experiment_config.model_dtype,
-            load_in_4bit = experiment_config.load_in_4bit,
+        model = LLM(
+            model=self.model_name,
+            enforce_eager=True,  # TODO: Disables CUDA graphs which records history of sorts
+            dtype="auto",
+            # dtype=experiment_config.model_dtype,  # TODO: different formatting than what we have.
+            max_model_len=experiment_config.max_seq_length,
+            max_num_seqs=experiment_config.batch_size,
+            quantization= "bitsandbytes" if experiment_config.load_in_4bit else None,
         )
 
-        tokenizer.padding_side = "left"
-        tokenizer.truncation_side = "left"
-        #tokenizer.pad_token = tokenizer.eos_token
-
-        if "gemma" in self.model_name:
-            from unsloth.chat_templates import get_chat_template
-            tokenizer = get_chat_template(
-                tokenizer,
-                chat_template = "gemma-3",
-            )
-
-        return model, tokenizer
+        return model
 
     def run(self) -> str:
         """
         Runs the benchmark
         """
-        # Load the model for inferencing
-        FastLanguageModel.for_inference(self.model)  # Enable native 2x faster inference
-
-        for i,batch in tqdm(enumerate(self.loader), total=len(self.loader), desc="Processing Batches"):
-            chat_prompts = [
-                self.tokenizer.apply_chat_template(
-                    conv,
-                    tokenize=False,
-                    add_generation_prompt=True
-                )
-                for conv in batch[1]
-            ]
-
-            # Create prompts for inputs for batch
-            inputs = self.tokenizer(
-                chat_prompts,
-                return_tensors="pt",
-                padding=True,
-                truncation=True,
-            ).to("cuda")
+        for i, batch in tqdm(enumerate(self.loader), total=len(self.loader), desc="Processing Batches"):
+            _, chat_prompts = batch
 
             # Inference on batch
-            outputs = self.model.generate(
-                **inputs,
-                max_new_tokens=experiment_config.max_new_tokens,
-                do_sample=False,
-                temperature=experiment_config.temperature,
-                use_cache=True
+            print(f"Prompt: {chat_prompts}")
+            # outputs = self.model.generate(
+            #     prompts=chat_prompts,
+            #     sampling_params=self.sampling_params,
+            #     use_tqdm=False
+            # )
+
+            outputs = self.model.chat(
+                messages=chat_prompts,
+                sampling_params=self.sampling_params,
+                use_tqdm=False
             )
-
-            decoded = self.tokenizer.batch_decode(outputs)
-
-            # Post process batch
-            cleaned = []
-            if "mistral" in self.model_name.lower():
-                cleaned = [r.replace("[INST]", "").replace("<s>", "").replace("</s>", "").strip().split("[/INST]")[-1] for r in decoded]
-            elif "llama" in self.model_name.lower():
-                for idx, r in enumerate(decoded):
-                    cleaned_r = r.split("<|start_header_id|>assistant<|end_header_id|>")[-1].strip().split('\n', 1)[-1].replace("<|eot_id|>","")
-                    if not cleaned_r:
-                        raise ValueError(f"Over pruned string found in Decoded for llama model. UUID: {batch[0][idx]} Original String:\n{r}")
-
-                    cleaned.append(cleaned_r)
-
-            if not cleaned:
-                raise ValueError(f"Empty output. Check Decoded:\n{decoded}")
 
             # Store aligned with original IDs
             notice_id = 0
-            for id, out in zip(batch[0], cleaned):
-                self.writer.add(id, out.strip())
+            for id, out in zip(batch[0], outputs):
+                self.writer.add(id, out.outputs[0].text.strip())
                 notice_id = id
 
             if experiment_config.tensorboard_active and i%experiment_config.log_interval == 0:
@@ -140,7 +106,11 @@ class Benchmark:
         return out_path
 
 def pipeline():
-    benchmark = Benchmark().run()
+    try:
+        _ = Benchmark().run()
+    finally:
+        if dist.is_initialized():
+            dist.destroy_process_group()
 
 if __name__ == "__main__":
     pipeline()

@@ -6,12 +6,13 @@ import torch
 import psutil
 import torch.distributed as dist
 from llm_pipeline import port_forwarding
+import pandas as pd
 
 from tqdm import tqdm
 from vllm import LLM, SamplingParams
 from torch.utils.tensorboard import SummaryWriter
 
-from parquet_handler import BatchWriter
+from db_handler import ResponseWriter
 from llm_pipeline.data_loader import PromptDataLoader
 
 from configs import experiment_config
@@ -28,12 +29,12 @@ class Benchmark:
         )
 
         data = PromptDataLoader()
-        self.loader = data.load_parquet_to_df(batch_size=experiment_config.batch_size)
-        self.writer = BatchWriter()
+        self.loader = data.load_data(batch_size=experiment_config.batch_size)
+        self.writer = ResponseWriter()
 
         if experiment_config.tensorboard_active:
             self.tensorboard = SummaryWriter(log_dir=os.path.join(experiment_config.log_dir, datetime.now().strftime(experiment_config.log_format)))
-            port_forwarding.launch_tensorboard()
+            # port_forwarding.launch_tensorboard()
 
 
     def get_model_name(self, model_id: str) -> str:
@@ -66,48 +67,40 @@ class Benchmark:
 
         return model
 
-    def run(self) -> str:
+    def run(self):
         """
         Runs the benchmark
         """
         for i, batch in tqdm(enumerate(self.loader), total=len(self.loader), desc="Processing Batches"):
-            _, chat_prompts = batch
+            story_ids, chat_prompts = batch
 
             # Inference on batch
-            print(f"Prompt: {chat_prompts}")
-            # outputs = self.model.generate(
-            #     prompts=chat_prompts,
-            #     sampling_params=self.sampling_params,
-            #     use_tqdm=False
-            # )
-
             outputs = self.model.chat(
                 messages=chat_prompts,
                 sampling_params=self.sampling_params,
                 use_tqdm=False
             )
-
             # Store aligned with original IDs
             notice_id = 0
-            for id, out in zip(batch[0], outputs):
-                self.writer.add(id, out.outputs[0].text.strip())
-                notice_id = id
+            for sid, out in zip(story_ids, outputs):
+                self.writer.add(sid, out.outputs[0].text.strip())
+                notice_id = sid
+            self.writer.flush()
 
-            if experiment_config.tensorboard_active and i%experiment_config.log_interval == 0:
-                self.tensorboard.add_scalar("Progress/Percentage", i/len(self.loader)*100, i)
-                self.tensorboard.add_scalar("Current UUID", batch[0][0], i)
+            if experiment_config.tensorboard_active and i % experiment_config.log_interval == 0:
+                self.tensorboard.add_scalar("Progress/Percentage", i / len(self.loader) * 100, i)
+                self.tensorboard.add_scalar("Current Story ID", story_ids[0], i)
                 self.tensorboard.add_scalar("GPU VRAM Allocated (GB)", torch.cuda.memory_allocated(0) / 1e9, i)
                 self.tensorboard.add_scalar("CPU RAM Allocated (GB)", process.memory_info().rss / 1e9, i)
-            print(f"Flushed batch {i} to {self.writer.flush()}")
-            with open('./notice.txt', 'w')as fp:
-                fp.write(str(notice_id))
-        # Final flush to save remaining data
-        out_path = self.writer.flush()
-        return out_path
+
+            print(f"Flushed batch {i}")
+
+        self.writer.close()
+
 
 def pipeline():
     try:
-        _ = Benchmark().run()
+        Benchmark().run()
     finally:
         if dist.is_initialized():
             dist.destroy_process_group()

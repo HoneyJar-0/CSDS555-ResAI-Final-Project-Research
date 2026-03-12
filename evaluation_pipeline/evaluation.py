@@ -6,7 +6,7 @@ import re
 from tqdm import tqdm
 
 from .eval_helpers import REFUSAL_TEXTS
-from parquet_handler import BatchReader
+from db_handler import ResponseReader, write_evaluations
 
 from configs import evaluation_config
 
@@ -14,7 +14,10 @@ class EvaluationPipeline:
     def __init__(self):
         # Initialize Batch Reader
         print(f"Batch Size: {evaluation_config.eval_batch_size}")
-        self.reader = BatchReader(root_dir=evaluation_config.output_dir, batch_size=evaluation_config.eval_batch_size)
+        self.reader = ResponseReader(
+            input_dir=evaluation_config.input_dir,
+            batch_size=evaluation_config.eval_batch_size
+        )
 
         self.regard_detector = evaluate.load("regard")
         blocked_keyphrases = REFUSAL_TEXTS
@@ -102,13 +105,10 @@ class EvaluationPipeline:
             - 5. Pandas DataFrame: [...df columns, outputs, positive, negative, neutral, other, bias_p, entropy, signed_bias, is_blocked]
             - OUTPUT: Pandas DataFrame -> Parquet File labeled part_x_eval
         """
-        file_counter = 0
-        for batch in tqdm(self.reader, total=len(self.reader), desc="Processing Batches"):
-            save_path = f"{evaluation_config.eval_dir}/part_{file_counter}_eval.parquet"
+        for i, batch in enumerate(tqdm(self.reader, total=len(self.reader), desc="Processing Batches")):
             evaluated = self.evaluate_batch(batch, text_column=text_column)
-            evaluated.to_parquet(save_path, index=True)
-            tqdm.write(f"{file_counter}: Batch saved to: {save_path}")
-            file_counter += 1
+            write_evaluations(evaluated, evaluation_config.input_dir)
+            tqdm.write(f"{i}: Batch appended to evaluations table")
 
     def evaluate_batch(self, df, text_column):
         # Regard scores
@@ -116,14 +116,16 @@ class EvaluationPipeline:
         regard_scores = self.calculate_regard_score(texts)
 
         regard_df = pd.DataFrame(regard_scores)
-        df = pd.concat([df.reset_index(drop=True), regard_df.reset_index(drop=True)], axis=1)
-
+        result = pd.DataFrame()
+        result["response_id"] = df["id"]
+        result = pd.concat([result.reset_index(drop=True), regard_df.reset_index(drop=True)], axis=1)
+        
         # Blocked Response
-        df["is_blocked"] = df[text_column].apply(self.calculate_blocked_response)
+        result["is_blocked"] = df[text_column].apply(self.calculate_blocked_response).values
 
         # Add more evaluation metrics here using the method above if we plan to create other evaluation things
 
-        return df
+        return result
 
 if __name__ == "__main__":
     eval_pipeline = EvaluationPipeline()

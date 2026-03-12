@@ -32,9 +32,6 @@ class ExperimentConfig(Config):
     temperature: float = 1.0
     top_p: float = 0.9
     top_k: int = 50
-    # Batching
-    buffer_check_count: int = 100
-    max_parquet_size_mib: float = 90.0
     # Logging
     tensorboard_active: bool = False
     tensorboard_port: int = 6543
